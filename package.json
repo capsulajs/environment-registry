@@ -2,12 +2,15 @@
   "name": "environment-registry",
   "version": "0.0.1",
   "description": "A service used in Capsula-Hub to register environments on demand ",
-  "main": "cli.js",
   "repository": "git@github.com:capsulajs/environment-registry.git",
   "author": "MikeSquall <michael.arbib@om2.com>",
   "license": "MIT",
+  "scripts": {
+    "doc": "typedoc ./src/api --out ./doc --mode file --name 'CapsulaJS - Environmet Registry' --hideGenerator"
+  },
   "dependencies": {
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "typedoc": "^0.14.2"
   },
   "devDependencies": {
     "typescript": "^3.2.4"
