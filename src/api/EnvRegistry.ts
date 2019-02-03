@@ -4,7 +4,7 @@ import { Env } from './Env';
 /**
  * EnvRegistry provides public methods to manage different versions of projects in CapsulaHub.
  */
-export default interface EnvRegistry {
+export interface EnvRegistry {
   /**
    * Provides a way to save environment.
    * This method require a key and an Env.
