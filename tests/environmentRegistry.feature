@@ -15,8 +15,7 @@ Scenario: Calling register method without providing the envKey and env
 Scenario: Calling register method with an envKey already registered
   Given Environment Registry with register method
   When  User calls register method an envKey and env already registered
-//what do we expect in such case?
-  Then  An error is returned? the existing env is replaced with the new one?
+  Then  The value of the existing env is updated with with the new one
 
 Scenario: Server error occurs after calling register method
   Given Environment Registry with register method
