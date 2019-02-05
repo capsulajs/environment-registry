@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { Env } from './Env';
+import { SaveResponse } from '@capsulajs/capsulajs-configuration-service/lib/api';
 
 /**
  * EnvRegistry provides public methods to manage different versions of projects in CapsulaHub.
@@ -11,19 +12,21 @@ export interface EnvRegistry {
    *
    * @return Promise resolved when the registration has been completed
    */
-  register: (envKey, env: Env) => Promise<undefined>,
+  register: (envKey: string, env: Env) => Promise<SaveResponse>;
 
   /**
    * Provides information about the registered environments (key, array of urls).
    *
    * @return An Observable sequence containing the registered environments.
    */
-  environments$: (envRegistryRequest: EnvRegistryRequest) => Observable<EnvRegistryResponse>,
+  environments$: (envRegistryRequest: EnvRegistryRequest) => EnvRegistryResponse;
 }
 
 export interface EnvRegistryRequest {}
 
-export interface EnvRegistryResponse {
-  key: string,
-  env: Env,
+interface EnvRegistryItem {
+  env: Env;
+  envKey: string;
 }
+
+export type EnvRegistryResponse = Observable<EnvRegistryItem>;
