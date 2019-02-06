@@ -11,11 +11,9 @@ describe('Register test suite', () => {
   
   beforeEach(async () => {
     localStorage.clear();
-    await configurationService.createRepository({ repository });
-    configurationServiceResponseMock.map(async ({ key, value }) => {
-      console.log('SAVE', key, value, await configurationService.save({ repository, key, value }));
-      console.log('FETCH', await configurationService.fetch({ repository, key }));
-    });
+    await configurationService.createRepository({repository});
+    await configurationService.save({repository, key: 'test', value: {}});
+    await configurationService.save({repository, key: 'develop', value: {}});
   });
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async () => {
