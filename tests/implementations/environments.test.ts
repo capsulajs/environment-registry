@@ -19,9 +19,7 @@ describe('Register test suite', () => {
   });
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async () => {
-    console.log('START');
-    console.log('ENTRIES', await configurationService.entries({ repository }));
-    
+    expect.assertions(1);
     envRegistry.environments$({})
       .subscribe((x) => console.log('X', x));
   });

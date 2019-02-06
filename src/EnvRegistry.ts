@@ -17,12 +17,10 @@ export default class EnvRegistry implements EnvRegistryInterface{
 
   public environments$(envRegistryRequest: EnvRegistryRequest): EnvRegistryResponse {
     let entries: Array<any> = [];
-    this.configurationService.entries({ repository: 'environmentRegistry'})
-      .then((response) => {
-        console.log('response', response);
-        entries = response.entries.map((conf) => ({ envKey: conf.key, env: conf.value }));
-        console.log('entries', entries);
-      });
+    this.configurationService.entries({ repository: 'environmentRegistry'}).then((response) => {
+      entries = response.entries.map((conf) => ({ envKey: conf.key, env: conf.value }));
+      console.log('entries', entries);
+    });
     return from(entries);
   }
 }
