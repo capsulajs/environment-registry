@@ -12,7 +12,7 @@ export default class EnvRegistry implements EnvRegistryInterface{
   constructor(private configurationService: ConfigurationService) {}
 
   public register(envKey: string, env: Env): Promise<SaveResponse> {
-    return this.configurationService.save({ repository: 'environmentRegistry', key: 'test', value: 'test'});
+    return this.configurationService.save({ repository: 'environmentRegistry', key: envKey, value: env });
   }
 
   public environments$(envRegistryRequest: EnvRegistryRequest): EnvRegistryResponse {
