@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@capsulajs/capsulajs-configuration-service": "^0.1.0",
+    "@types/node": "^10.12.21",
     "rxjs": "^6.3.3",
     "typedoc": "^0.14.2"
   },
