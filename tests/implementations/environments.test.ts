@@ -14,14 +14,19 @@ describe('Register test suite', () => {
     localStorage.clear();
     await configurationService.createRepository({ repository });
     configurationServiceResponseMock.forEach(async ({ key, value }) => {
+      console.log(key, value);
+      
       await configurationService.save({ repository, key, value })
     });
   });
 
-  it('Subscribe to environments$ method returns all available envKeys and Envs', () => {
+  it('Subscribe to environments$ method returns all available envKeys and Envs', async () => {
+    console.log('START');
+    console.log('ENTRIES', await configurationService.entries({ repository }));
+    
     envRegistry.environments$({})
       .subscribe((x) => console.log('X', x));
   });
 
-  it('Server error occurs when subscribing to environments$', () => {});
+  // it('Server error occurs when subscribing to environments$', () => {});
 });
