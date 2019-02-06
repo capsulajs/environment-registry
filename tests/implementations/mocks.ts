@@ -5,14 +5,16 @@ export const configurationServiceResponseMock = [
       accessPoints: [
         { url: 'http://accessPoint/dev/service1'},
         { url: 'http://accessPoint/dev/service2'}
-      ]}},
+      ]
+    }},
   {
     key: 'master',
     value: {
       accessPoints: [
         { url: 'http://accessPoint/master/service1'},
         { url: 'http://accessPoint/master/service2'}
-      ]}},
+      ]
+    }},
   {
     key: 'tag-1',
     value: {

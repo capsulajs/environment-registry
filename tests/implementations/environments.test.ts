@@ -5,7 +5,6 @@ import {
 import { configurationServiceResponseMock } from './mocks';
 
 describe('Register test suite', () => {
-  // TODO import configuration service and mock confService.entries()
   const configurationService = new ConfigurationServiceLocalStorage('token');
   const repository = 'environmentRegistry';
   const envRegistry = new EnvRegistry(configurationService);
@@ -13,11 +12,9 @@ describe('Register test suite', () => {
   beforeEach(async () => {
     localStorage.clear();
     await configurationService.createRepository({ repository });
-    configurationServiceResponseMock.forEach(async ({ key, value }) => {
-      console.log(key, value);
-      
-      await configurationService.save({ repository, key, value })
-    });
+    await Promise.all(configurationServiceResponseMock.map(({ key, value }) =>
+      configurationService.save({ repository, key, value })
+    ));
   });
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async () => {
