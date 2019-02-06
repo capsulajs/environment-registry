@@ -8,13 +8,14 @@ describe('Register test suite', () => {
   const configurationService = new ConfigurationServiceLocalStorage('token');
   const repository = 'environmentRegistry';
   const envRegistry = new EnvRegistry(configurationService);
-
+  
   beforeEach(async () => {
     localStorage.clear();
     await configurationService.createRepository({ repository });
-    await Promise.all(configurationServiceResponseMock.map(({ key, value }) =>
-      configurationService.save({ repository, key, value })
-    ));
+    configurationServiceResponseMock.map(async ({ key, value }) => {
+      console.log('SAVE', key, value, await configurationService.save({ repository, key, value }));
+      console.log('FETCH', await configurationService.fetch({ repository, key }));
+    });
   });
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async () => {
