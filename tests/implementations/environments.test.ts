@@ -5,10 +5,9 @@ import {
 import { environments } from './mocks';
 
 describe('Register test suite', () => {
-  const configurationService = new ConfigurationServiceLocalStorage('token');
   const repository = 'environmentRegistry';
-  const envRegistry = new EnvRegistry(configurationService);
-  
+  const envRegistry = new EnvRegistry('token');
+
   beforeEach(async () => {
     localStorage.clear();
     await configurationService.createRepository({repository});
@@ -20,6 +19,8 @@ describe('Register test suite', () => {
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async () => {
     expect.assertions(1);
+    console.log('START');
+    console.log('ENTRIES', await configurationService.entries({ repository }));
     envRegistry.environments$({})
       .subscribe((x) => console.log('X', x));
   });
