@@ -2,43 +2,61 @@ import EnvRegistry from '../../src/EnvRegistry';
 import { environments } from './mocks';
 
 describe('Register test suite', () => {
-  const envRegistry = new EnvRegistry('token');
+  let envRegistry: EnvRegistry;
 
-  beforeEach(() => localStorage.clear());
+  const checkExpectedEntries = async (expected: any) => {
+    const entries = await envRegistry.configurationService.entries({ repository: 'environmentRegistry'});
+    await expect(entries).toEqual(expected);
+  };
 
-  it('Calling register method registers the version of the provided envKey and Env ', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    envRegistry = new EnvRegistry('token');
+  });
+
+  it('Calling register method registers the version of the provided envKey and Env ', async (done) => {
     expect.assertions(1);
-    envRegistry.environments$({}).subscribe((env) => {
-      console.log(env);
-      expect(env).toEqual({});
-    });
-    envRegistry.register({ envKey: 'dev', env: { accessPoints: [{ url: 'http://aaa.com' }]}})
-      .then(() => console.log('SUCCESS'))
+
+    envRegistry.register({ envKey: 'master', env: environments.master})
+      .then(async () => {
+        await checkExpectedEntries({ entries: [{ key: 'master', value: { accessPoints: [
+                { url: 'http://accessPoint/master/service1' },
+                { url: 'http://accessPoint/master/service2' }
+              ]}}]});
+        done();
+        // envRegistry.environments$({}).subscribe((env) => {
+        //   console.log(env);
+        //   expect(env).toEqual([]);
+        // });
+      })
       .catch(err => console.log(err));
   });
 
-  it('Calling register method without providing the envKey and Env (empty envKey or Env) ', () => {
-    expect.assertions(2);
-    // @ts-ignore
-    envRegistry.register({ envKey: null, env: environments.develop })
-      .catch((err: any) => expect(err).toBe(new Error('no envKey provided')));
-    // @ts-ignore
-    envRegistry.register({ envKey: 'master', env: {} })
-      .catch((err: any) => expect(err).toBe(new Error('wrong env provided')));
-  });
+  // it('Calling register method without providing the envKey and Env (empty envKey or Env) ', async () => {
+  //   expect.assertions(2);
+  //   // @ts-ignore
+  //   envRegistry.register({ envKey: null, env: environments.develop })
+  //     .catch((err: any) => expect(err).toBe(new Error('no envKey provided')));
+  //   // @ts-ignore
+  //   envRegistry.register({ envKey: 'master', env: {} })
+  //     .catch((err: any) => expect(err).toBe(new Error('wrong env provided')));
+  // });
 
-  it('Calling register method with an envKey already registered ', () => {
+  it('Calling register method with an envKey already registered ', async (done) => {
     expect.assertions(1);
-    envRegistry.register({ envKey: 'dev', env: environments.develop})
-      .then(() => console.log('SUCCESS'))
-      .catch(err => console.log(err));
-    envRegistry.environments$({}).subscribe((env) => {
-      console.log(env);
-      expect(env).toEqual({});
-    });
-    envRegistry.register({ envKey: 'dev', env: environments.master })
-      .then(() => console.log('SUCCESS'))
-      .catch(err => console.log(err));
+    await envRegistry.register({ envKey: 'test', env: environments.develop});
+    // envRegistry.environments$({}).subscribe((env) => {
+    //   console.log(env);
+    //   expect(env).toEqual({});
+    // });
+    envRegistry.register({ envKey: 'test', env: environments.master })
+      .then(async () => {
+        await checkExpectedEntries({ entries: [{ key: 'test', value: { accessPoints: [
+                { url: 'http://accessPoint/master/service1' },
+                { url: 'http://accessPoint/master/service2' }
+              ]}}]});
+        done();
+      });
   });
 
   // it('Server error occurs after calling register method ', () => {});

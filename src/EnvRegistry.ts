@@ -1,4 +1,4 @@
-import { from } from 'rxjs';
+import { from, Observable, Subject } from 'rxjs';
 import {
   EnvRegistry as EnvRegistryInterface,
   EnvRegistryItem,
@@ -7,35 +7,49 @@ import {
   RegisterResponse
 } from './api/EnvRegistry';
 import { ConfigurationService, ConfigurationServiceLocalStorage } from '@capsulajs/capsulajs-configuration-service';
+import { Env } from './api/Env';
+import { messages } from '@capsulajs/capsulajs-configuration-service/lib/utils';
 
 export default class EnvRegistry implements EnvRegistryInterface{
   configurationService: ConfigurationService;
+  repositoryCreated: boolean;
+  environmentsSubject$: Subject<any>;
 
   constructor(private token: string) {
     this.configurationService = new ConfigurationServiceLocalStorage(token); // add logic to choose specific provider
-    this.configurationService.createRepository({ repository: 'environmentRegistry' })
-      .then() // look for Promise in constructor behavior
-      .catch(); // catch specific Error(messages.repositoryAlreadyExists
+    this.repositoryCreated = false;
+    this.environmentsSubject$ = new Subject();
   }
 
-  public register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
-    console.log(`REGISTER req: ${registerRequest}`);
+  private save(key: string, value: Env) {
+    return this.configurationService.save({ repository: 'environmentRegistry', key, value });
+  };
+
+  public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
     // Add some validation here
-    return this.configurationService.save({
-      repository: 'environmentRegistry',
-      key: registerRequest.envKey,
-      value: registerRequest.env
-    });
+    if (!this.repositoryCreated) {
+      try {
+        await this.configurationService.createRepository({ repository: 'environmentRegistry' });
+        this.repositoryCreated = true;
+      } catch(e) {
+        this.repositoryCreated = e.message === messages.repositoryAlreadyExists ;
+      }
+    }
+    return this.save(registerRequest.envKey, registerRequest.env);
   }
 
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
-    let entries: Array<any> = [];
-    this.configurationService.entries({ repository: 'environmentRegistry'})
-      .then((response) => {
-        entries = response.entries.map((conf) => ({ envKey: conf.key, env: conf.value }));
-        console.log(`ENTRIES resp: ${entries}`);
-      });
+    return Observable.create((obs: any )=> {
+      let entries: Array<any> = [];
+      this.configurationService.entries({ repository: 'environmentRegistry'})
+        .then((response) => {
+          entries = response.entries.map((conf) => ({ envKey: conf.key, env: conf.value }));
+          console.log(`ENTRIES resp: ${entries}`);
+        })
+        .catch(error => console.log(error));
 
-    return from(entries);
+      obs.next(entries);
+
+    });
   }
 }
