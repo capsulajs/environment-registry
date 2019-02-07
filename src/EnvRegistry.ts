@@ -9,6 +9,8 @@ import {
 import { ConfigurationService, ConfigurationServiceLocalStorage } from '@capsulajs/capsulajs-configuration-service';
 import { Env } from './api/Env';
 import { messages } from '@capsulajs/capsulajs-configuration-service/lib/utils';
+import { envKeyValidator, envValidator, validationMessages } from './utils';
+import { switchMap } from 'rxjs/operators';
 
 export default class EnvRegistry implements EnvRegistryInterface{
   configurationService: ConfigurationService;
@@ -26,7 +28,9 @@ export default class EnvRegistry implements EnvRegistryInterface{
   };
 
   public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
-    // Add some validation here
+    if (!envValidator(registerRequest)) return Promise.reject(new Error(validationMessages.envIsNotCorrect));
+    if (!envKeyValidator(registerRequest)) return Promise.reject(new Error(validationMessages.envKeyIsNotCorrect));
+
     if (!this.repositoryCreated) {
       try {
         await this.configurationService.createRepository({ repository: 'environmentRegistry' });
@@ -39,17 +43,27 @@ export default class EnvRegistry implements EnvRegistryInterface{
   }
 
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
-    return Observable.create((obs: any )=> {
-      let entries: Array<any> = [];
-      this.configurationService.entries({ repository: 'environmentRegistry'})
-        .then((response) => {
-          entries = response.entries.map((conf) => ({ envKey: conf.key, env: conf.value }));
-          console.log(`ENTRIES resp: ${entries}`);
-        })
-        .catch(error => console.log(error));
+    // return Observable.create((obs: any )=> {
+    //   let entries: Array<any> = [];
+    //   this.configurationService.entries({ repository: 'environmentRegistry'})
+    //     .then((response) => {
+    //       entries = response.entries.map((conf) => ({ envKey: conf.key, env: conf.value }));
+    //       console.log(`ENTRIES resp: ${entries}`);
+    //     })
+    //     .catch(error => console.log(error));
+    //
+    //   obs.next(entries);
+    //
+    // });
 
-      obs.next(entries);
+    // const response = await this.configurationService.entries({ repository: 'environmentRegistry'});
+    //
+    // const entries = response.entries.map((conf) => ({ envKey: conf.key, env: conf.value }));
+    // console.log(`ENTRIES resp: ${entries}`);
+    //
+    // return from(entries);
 
-    });
+    return from(this.configurationService.entries({ repository: 'environmentRegistry'}))
+      .pipe(switchMap((response: any) => from(response.entries)));
   }
 }
