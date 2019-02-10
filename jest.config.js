@@ -1,18 +1,18 @@
 module.exports = {
   setupFiles: [
-    'jest-localstorage-mock'
+    "jest-localstorage-mock"
   ],
   transform: {
-    '\\.ts$': 'ts-jest'
+    "\\.ts$": "ts-jest"
   },
-  testRegex: '.*\\.test\\.ts$',
+  testRegex: ".*\\.test\\.ts$",
   moduleFileExtensions: [
-    'ts',
-    'js'
+    "ts",
+    "js"
   ],
   moduleDirectories: [
-    'src',
-    'node_modules'
+    "src",
+    "node_modules"
   ],
-  testEnvironment: 'node'
+  testEnvironment: "node"
 };
