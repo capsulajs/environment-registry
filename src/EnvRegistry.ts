@@ -1,4 +1,7 @@
-import { from, Observable, Subject } from 'rxjs';
+import { from } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { messages } from '@capsulajs/capsulajs-configuration-service/lib/utils';
+import { ConfigurationService, ConfigurationServiceLocalStorage } from '@capsulajs/capsulajs-configuration-service';
 import {
   EnvRegistry as EnvRegistryInterface,
   EnvRegistryItem,
@@ -6,22 +9,17 @@ import {
   EnvironmentsResponse,
   RegisterResponse
 } from './api/EnvRegistry';
-import { ConfigurationService, ConfigurationServiceLocalStorage } from '@capsulajs/capsulajs-configuration-service';
 import { Env } from './api/Env';
-import { messages } from '@capsulajs/capsulajs-configuration-service/lib/utils';
 import { envKeyValidator, envValidator, validationMessages } from './utils';
-import { switchMap } from 'rxjs/operators';
 
 export default class EnvRegistry implements EnvRegistryInterface{
   configurationService: ConfigurationService;
   repositoryCreated: boolean;
-  environmentsSubject$: Subject<any>;
   repository: string;
 
   constructor(private token: string) {
     this.configurationService = new ConfigurationServiceLocalStorage(token); // add logic to choose specific provider
     this.repositoryCreated = false;
-    this.environmentsSubject$ = new Subject();
     this.repository = 'environmentRegistry';
   }
 

@@ -2,7 +2,6 @@ import EnvRegistry from '../../src/EnvRegistry';
 import { environments } from './mocks';
 
 describe('Register test suite', () => {
-  const repository = 'environmentRegistry';
   let envRegistry: EnvRegistry;
 
   beforeEach(async () => {

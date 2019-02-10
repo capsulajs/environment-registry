@@ -19,7 +19,7 @@ describe('Register test suite', () => {
     });
   });
 
-  it('Calling register method without providing the envKey and Env (empty envKey or Env) ', async () => {
+  it('Calling register method without providing the envKey and Env (empty envKey or Env) ', () => {
     expect.assertions(16);
 
     const badEnvKeyValues = [null, undefined, 123, [], ['test'], {}, { test: 'test' }];
