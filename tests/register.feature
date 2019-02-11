@@ -1,7 +1,4 @@
 
-Feature: register and environments$ methods
-
-
 Scenario: Calling register method registers the environment of the provided envKey and env
   Given Environment Registry with register method
   When  User calls register method with by providing a valid envKey and env
@@ -48,5 +45,3 @@ Scenario: Server error occurs after calling register method
   When  User calls register method with valid request
   And   Server error occurs
   Then  A relevant error is returned
-
-
