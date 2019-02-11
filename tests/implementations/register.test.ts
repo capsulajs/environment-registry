@@ -19,7 +19,7 @@ describe('Register test suite', () => {
     });
   });
 
-  it('Calling register method without providing the envKey and Env (empty envKey or Env) ', () => {
+  it('Calling register method with providing not valid envKey and Env', () => {
     expect.assertions(16);
 
     const badEnvKeyValues = [null, undefined, 123, [], ['test'], {}, { test: 'test' }];
@@ -37,9 +37,15 @@ describe('Register test suite', () => {
     });
   });
 
-  it('Calling register method with an envKey already registered ', async (done) => {
-    expect.assertions(1);
+  it('Calling register method with an envKey already registered processes to update', async (done) => {
+    expect.assertions(2);
     await envRegistry.register({ envKey: 'test', env: environments.develop});
+    envRegistry.environments$({}).subscribe((env) => {
+      expect(env).toEqual({ key: 'test', value: { accessPoints: [
+            { url: 'http://accessPoint/dev/service1' },
+            { url: 'http://accessPoint/dev/service2' }
+          ]}});
+    });
     await envRegistry.register({ envKey: 'test', env: environments.master });
     envRegistry.environments$({}).subscribe((env) => {
       expect(env).toEqual({ key: 'test', value: { accessPoints: [

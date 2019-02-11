@@ -1,7 +1,7 @@
 import EnvRegistry from '../../src/EnvRegistry';
 import { environments } from './mocks';
 
-describe('Register test suite', () => {
+describe('Environments$ test suite', () => {
   let envRegistry: EnvRegistry;
 
   beforeEach(async () => {
