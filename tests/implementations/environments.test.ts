@@ -13,102 +13,38 @@ describe('Environments$ test suite', () => {
   });
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async (done) => {
-    expect.assertions(7);
-    let updates = 0;
+    expect.assertions(4);
+    const receivedEnvs: any = [];
+    const expectedArray = [
+      { key: 'tag-1', value: environments['tag-1'] },
+      { key: 'master', value: environments.master },
+      { key: 'develop', value: environments.develop }
+    ];
+    const expectedUpdatedArray = [
+      { key: 'tag-1', value: environments['tag-1'] },
+      { key: 'master', value: environments.master },
+      { key: 'tag-2', value: environments['tag-2'] },
+      { key: 'develop', value: environments.develop }
+    ];
     envRegistry.environments$({})
-      .subscribe((data) => {
-        updates = updates + 1;
-        switch (updates) {
-          case 1:
-            expect(data).toEqual({
-              key: 'develop',
-              value: {
-                accessPoints: [
-                  { url: 'http://accessPoint/dev/service1' },
-                  { url: 'http://accessPoint/dev/service2' }
-                ]
-              }
-            });
-            break;
-          case 2:
-            expect(data).toEqual({
-              key: 'master',
-              value: {
-                accessPoints: [
-                  { url: 'http://accessPoint/master/service1' },
-                  { url: 'http://accessPoint/master/service2' }
-                ]
-              }
-            });
-            break;
-          case 3:
-            expect(data).toEqual({
-              key: 'tag-1',
-              value: {
-                accessPoints: [
-                  { url: 'http://accessPoint/tag-1/service1' },
-                  { url: 'http://accessPoint/tag-1/service2' }
-                ]
-              }
-            });
-            break;
-          default: break;
-        }
-      });
+      .subscribe(
+        (data) => receivedEnvs.push(data),
+        (err) => console.log(err),
+        () => {
+          expect(receivedEnvs).toHaveLength(3);
+          expect(receivedEnvs).toEqual(expect.arrayContaining(expectedArray));
+        });
     await envRegistry.register({ envKey: 'tag-2', env: environments['tag-2']});
-    updates = 0;
+    receivedEnvs.length = 0;
     envRegistry.environments$({})
-      .subscribe((data) => {
-        updates = updates + 1;
-        switch (updates) {
-          case 1:
-            expect(data).toEqual({
-              key: 'develop',
-              value: {
-                accessPoints: [
-                  { url: 'http://accessPoint/dev/service1' },
-                  { url: 'http://accessPoint/dev/service2' }
-                ]
-              }
-            });
-            break;
-          case 2:
-            expect(data).toEqual({
-              key: 'master',
-              value: {
-                accessPoints: [
-                  { url: 'http://accessPoint/master/service1' },
-                  { url: 'http://accessPoint/master/service2' }
-                ]
-              }
-            });
-            break;
-          case 3:
-            expect(data).toEqual({
-              key: 'tag-1',
-              value: {
-                accessPoints: [
-                  { url: 'http://accessPoint/tag-1/service1' },
-                  { url: 'http://accessPoint/tag-1/service2' }
-                ]
-              }
-            });
-            break;
-          case 4:
-            expect(data).toEqual({
-              key: 'tag-2',
-              value: {
-                accessPoints: [
-                  { url: 'http://accessPoint/tag-2/service1' },
-                  { url: 'http://accessPoint/tag-2/service2' }
-                ]
-              }
-            });
-            done();
-            break;
-          default: break;
-        }
-      });
+      .subscribe(
+        (data) => receivedEnvs.push(data),
+        (err) => console.log(err),
+        () => {
+          expect(receivedEnvs).toHaveLength(4);
+          expect(receivedEnvs).toEqual(expect.arrayContaining(expectedUpdatedArray));
+          done()
+        });
   });
 
   // it('Server error occurs when subscribing to environments$', () => {});
