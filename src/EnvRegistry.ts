@@ -10,7 +10,7 @@ import {
   RegisterResponse
 } from './api/EnvRegistry';
 import { envKeyValidator, envValidator, validationMessages } from './utils';
-import { configEntry } from './types';
+import { configEntry, entriesResponse } from './types';
 
 export default class EnvRegistry implements EnvRegistryInterface{
   configurationService: ConfigurationService;
@@ -50,6 +50,9 @@ export default class EnvRegistry implements EnvRegistryInterface{
 
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
     return from(this.configurationService.entries({ repository: this.repository}))
-      .pipe(switchMap((response: any) => (from(response.entries) as Observable<EnvRegistryItem>)));
+      .pipe(switchMap((response: entriesResponse) => {
+        const entries = response.entries.map(entry => ({ 'envKey': entry.key, 'env': entry.value }));
+        return (from(entries) as Observable<EnvRegistryItem>)
+      }));
   }
 }

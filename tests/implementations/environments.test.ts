@@ -17,15 +17,15 @@ describe('Environments$ test suite', () => {
     expect.assertions(4);
     const receivedEnvs: EnvRegistryItem[] = [];
     const expectedArray = [
-      { key: 'tag-1', value: environments['tag-1'] },
-      { key: 'master', value: environments.master },
-      { key: 'develop', value: environments.develop }
+      { envKey: 'tag-1', env: environments['tag-1'] },
+      { envKey: 'master', env: environments.master },
+      { envKey: 'develop', env: environments.develop }
     ];
     const expectedUpdatedArray = [
-      { key: 'tag-1', value: environments['tag-1'] },
-      { key: 'master', value: environments.master },
-      { key: 'tag-2', value: environments['tag-2'] },
-      { key: 'develop', value: environments.develop }
+      { envKey: 'tag-1', env: environments['tag-1'] },
+      { envKey: 'master', env: environments.master },
+      { envKey: 'tag-2', env: environments['tag-2'] },
+      { envKey: 'develop', env: environments.develop }
     ];
     await new Promise((resolve => {
       envRegistry.environments$({})

@@ -14,7 +14,7 @@ describe('Register test suite', () => {
     expect.assertions(1);
     await envRegistry.register({ envKey: 'master', env: environments.master});
     envRegistry.environments$({}).subscribe(
-      (env) => { expect(env).toEqual({key: 'master', value: environments.master })},
+      (env) => { expect(env).toEqual({ envKey: 'master', env: environments.master })},
       (err) => console.log(err),
       () => done());
   });
@@ -46,11 +46,11 @@ describe('Register test suite', () => {
     const createRepoSpy = jest.spyOn(EnvRegistry.prototype, 'createRepository');
     await envRegistry.register({ envKey: 'test', env: environments.develop});
     envRegistry.environments$({}).subscribe((env) => {
-      expect(env).toEqual({ key: 'test', value: devEnv});
+      expect(env).toEqual({ envKey: 'test', env: devEnv});
     });
     await envRegistry.register({ envKey: 'test', env: environments.master });
     envRegistry.environments$({}).subscribe((env) => {
-      expect(env).toEqual({ key: 'test', value: masterEnv});
+      expect(env).toEqual({ envKey: 'test', env: masterEnv});
       expect(createRepoSpy).toHaveBeenCalledTimes(1);
       done();
     });
