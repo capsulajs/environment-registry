@@ -1,4 +1,4 @@
-import { from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { messages } from '@capsulajs/capsulajs-configuration-service/lib/utils';
 import { ConfigurationService, ConfigurationServiceLocalStorage } from '@capsulajs/capsulajs-configuration-service';
@@ -9,8 +9,8 @@ import {
   EnvironmentsResponse,
   RegisterResponse
 } from './api/EnvRegistry';
-import { Env } from './api/Env';
 import { envKeyValidator, envValidator, validationMessages } from './utils';
+import { configEntry } from './types';
 
 export default class EnvRegistry implements EnvRegistryInterface{
   configurationService: ConfigurationService;
@@ -23,8 +23,12 @@ export default class EnvRegistry implements EnvRegistryInterface{
     this.repository = 'environmentRegistry';
   }
 
-  private save(key: string, value: Env) {
-    return this.configurationService.save({ repository: this.repository, key, value });
+  private save(params: configEntry) {
+    return this.configurationService.save({ repository: this.repository, key: params.key, value: params.value });
+  };
+
+  createRepository() {
+    return this.configurationService.createRepository({ repository: this.repository });
   };
 
   public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
@@ -33,17 +37,19 @@ export default class EnvRegistry implements EnvRegistryInterface{
 
     if (!this.repositoryCreated) {
       try {
-        await this.configurationService.createRepository({ repository: this.repository });
+        await this.createRepository();
         this.repositoryCreated = true;
       } catch(e) {
-        this.repositoryCreated = e.message === messages.repositoryAlreadyExists ;
+        e.message === messages.repositoryAlreadyExists
+          ? this.repositoryCreated = true
+          : console.log(e);
       }
     }
-    return this.save(registerRequest.envKey, registerRequest.env);
+    return this.save({key: registerRequest.envKey, value: registerRequest.env});
   }
 
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
     return from(this.configurationService.entries({ repository: this.repository}))
-      .pipe(switchMap((response: any) => from(response.entries)));
+      .pipe(switchMap((response: any) => (from(response.entries) as Observable<EnvRegistryItem>)));
   }
 }
