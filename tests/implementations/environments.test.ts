@@ -50,6 +50,4 @@ describe('Environments$ test suite', () => {
           done()
         });
   });
-
-  // it('Server error occurs when subscribing to environments$', () => {});
 });

@@ -55,6 +55,4 @@ describe('Register test suite', () => {
       done();
     });
   });
-
-  // it('Server error occurs after calling register method ', () => {});
 });
