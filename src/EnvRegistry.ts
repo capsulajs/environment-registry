@@ -1,4 +1,4 @@
-import { from, Observable } from 'rxjs';
+import { from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { messages } from '@capsulajs/capsulajs-configuration-service/lib/utils';
 import { ConfigurationService, ConfigurationServiceLocalStorage } from '@capsulajs/capsulajs-configuration-service';
@@ -10,7 +10,7 @@ import {
   RegisterResponse
 } from './api/EnvRegistry';
 import { envKeyValidator, envValidator, validationMessages } from './utils';
-import { configEntry, entriesResponse } from './types';
+import { ConfigEntry, EntriesResponse } from './types';
 
 export default class EnvRegistry implements EnvRegistryInterface{
   configurationService: ConfigurationService;
@@ -23,7 +23,7 @@ export default class EnvRegistry implements EnvRegistryInterface{
     this.repository = 'environmentRegistry';
   }
 
-  private save(params: configEntry) {
+  private save(params: ConfigEntry) {
     return this.configurationService.save({ repository: this.repository, key: params.key, value: params.value });
   };
 
@@ -50,9 +50,10 @@ export default class EnvRegistry implements EnvRegistryInterface{
 
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
     return from(this.configurationService.entries({ repository: this.repository}))
-      .pipe(switchMap((response: entriesResponse) => {
-        const entries = response.entries.map(entry => ({ 'envKey': entry.key, 'env': entry.value }));
-        return (from(entries) as Observable<EnvRegistryItem>)
+      .pipe(switchMap((response: EntriesResponse) => {
+        return from(
+          response.entries.map(entry => ({ 'envKey': entry.key, 'env': entry.value }))
+        );
       }));
   }
 }

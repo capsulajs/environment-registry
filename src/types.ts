@@ -1,5 +1,10 @@
 import { Env } from './api/Env';
 
-export type configEntry = { key: string, value: Env };
+export interface ConfigEntry {
+  key: string,
+  value: Env
+}
 
-export type entriesResponse = { entries: configEntry[] };
+export interface EntriesResponse {
+  entries: ConfigEntry[]
+}

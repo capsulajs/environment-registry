@@ -1,5 +1,5 @@
 import EnvRegistry from '../../src/EnvRegistry';
-import { environments } from './mocks';
+import { environments } from '../helpers/mocks';
 import { EnvRegistryItem } from '../../src/api/EnvRegistry';
 
 describe('Environments$ test suite', () => {
