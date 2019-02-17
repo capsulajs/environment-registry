@@ -4,26 +4,30 @@ import { Env } from './Env';
 /**
  * EnvRegistry provides public methods to manage different versions of projects in CapsulaHub.
  */
-export default interface EnvRegistry {
+export interface EnvRegistry {
   /**
    * Provides a way to save environment.
    * This method require a key and an Env.
    *
    * @return Promise resolved when the registration has been completed
    */
-  register: (envKey, env: Env) => Promise<undefined>,
+  register: (registerRequest: EnvRegistryItem) => Promise<RegisterResponse>;
 
   /**
    * Provides information about the registered environments (key, array of urls).
    *
    * @return An Observable sequence containing the registered environments.
    */
-  environments$: (envRegistryRequest: EnvRegistryRequest) => Observable<EnvRegistryResponse>,
+  environments$: (environmentsRequest: EnvironmentsRequest) => EnvironmentsResponse;
 }
 
-export interface EnvRegistryRequest {}
-
-export interface EnvRegistryResponse {
-  key: string,
-  env: Env,
+export interface EnvRegistryItem {
+  env: Env;
+  envKey: string;
 }
+
+export interface RegisterResponse {}
+
+export interface EnvironmentsRequest {}
+
+export type EnvironmentsResponse = Observable<EnvRegistryItem>;
