@@ -6,13 +6,26 @@
   "author": "MikeSquall <michael.arbib@om2.com>",
   "license": "MIT",
   "scripts": {
-    "doc": "typedoc ./src/api --out ./doc --mode file --name 'CapsulaJS - Environmet Registry' --hideGenerator"
+    "doc": "typedoc ./src/api --out ./doc --mode file --name 'CapsulaJS - Environmet Registry' --hideGenerator",
+    "lint": "tslint -p tsconfig.json",
+    "lint:fix": "yarn lint --fix",
+    "prettier": "prettier --write '{src,tests}/**/*.{ts,tsx,js,jsx}'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "dependencies": {
     "rxjs": "^6.3.3",
     "typedoc": "^0.14.2"
   },
   "devDependencies": {
-    "typescript": "^3.2.4"
+    "typescript": "^3.2.4",
+    "husky": "^1.3.1",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.18.0"
   }
 }
