@@ -7,7 +7,15 @@
   "license": "MIT",
   "scripts": {
     "doc": "typedoc ./src/api --out ./doc --mode file --name 'CapsulaJS - Environmet Registry' --hideGenerator",
-    "test": "jest --maxWorkers=4 --env=jsdom"
+    "test": "jest --maxWorkers=4 --env=jsdom",
+    "lint": "tslint -p tsconfig.json",
+    "lint:fix": "yarn lint --fix",
+    "prettier": "prettier --write '{src,tests}/**/*.{ts,tsx,js,jsx}'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "dependencies": {
     "@capsulajs/capsulajs-configuration-service": "^0.1.0",
@@ -21,6 +29,11 @@
     "jest": "^24.0.0",
     "jest-localstorage-mock": "^2.4.0",
     "ts-jest": "^23.10.5",
-    "typescript": "^3.2.4"
+    "typescript": "^3.2.4",
+    "husky": "^1.3.1",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.18.0"
   }
 }
