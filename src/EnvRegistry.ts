@@ -1,7 +1,10 @@
 import { from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { messages } from '@capsulajs/capsulajs-configuration-service/lib/utils';
-import { ConfigurationService, ConfigurationServiceLocalStorage } from '@capsulajs/capsulajs-configuration-service';
+import {
+  ConfigurationService,
+  ConfigurationServiceLocalStorage,
+  messages,
+} from '@capsulajs/capsulajs-configuration-service';
 import {
   EnvRegistry as EnvRegistryInterface,
   EnvRegistryItem,

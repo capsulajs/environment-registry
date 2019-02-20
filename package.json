@@ -18,7 +18,7 @@
     }
   },
   "dependencies": {
-    "@capsulajs/capsulajs-configuration-service": "^0.1.0",
+    "@capsulajs/capsulajs-configuration-service": "^0.1.5",
     "@types/node": "^10.12.21",
     "rxjs": "^6.4.0",
     "typedoc": "^0.14.2"
@@ -26,14 +26,14 @@
   "devDependencies": {
     "@types/jest": "^24.0.0",
     "codacy-coverage": "^3.4.0",
+    "husky": "^1.3.1",
     "jest": "^24.0.0",
     "jest-localstorage-mock": "^2.4.0",
-    "ts-jest": "^23.10.5",
-    "typescript": "^3.2.4",
-    "husky": "^1.3.1",
     "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0",
+    "ts-jest": "^23.10.5",
     "tslint": "^5.12.1",
-    "tslint-config-prettier": "^1.18.0"
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.2.4"
   }
 }
