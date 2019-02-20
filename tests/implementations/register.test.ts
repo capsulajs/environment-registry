@@ -50,7 +50,8 @@ describe('Register test suite', () => {
     const masterEnv = {
       accessPoints: [{ url: 'http://accessPoint/master/service1' }, { url: 'http://accessPoint/master/service2' }],
     };
-    const createRepoSpy = jest.spyOn(EnvRegistry.prototype, 'createRepository');
+    // @ts-ignore
+    const createRepoSpy = jest.spyOn(envRegistry, 'createRepository');
     await envRegistry.register({ envKey: 'test', env: environments.develop });
     envRegistry.environments$({}).subscribe((env) => {
       expect(env).toEqual({ envKey: 'test', env: devEnv });

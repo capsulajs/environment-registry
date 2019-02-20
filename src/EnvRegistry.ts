@@ -23,10 +23,6 @@ export default class EnvRegistry implements EnvRegistryInterface {
     this.repository = 'environmentRegistry';
   }
 
-  public createRepository() {
-    return this.configurationService.createRepository({ repository: this.repository });
-  }
-
   public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
     if (!envValidator(registerRequest)) {
       return Promise.reject(new Error(validationMessages.envIsNotCorrect));
@@ -56,5 +52,9 @@ export default class EnvRegistry implements EnvRegistryInterface {
 
   private save(params: ConfigEntry) {
     return this.configurationService.save({ repository: this.repository, key: params.key, value: params.value });
+  }
+
+  private createRepository() {
+    return this.configurationService.createRepository({ repository: this.repository });
   }
 }
