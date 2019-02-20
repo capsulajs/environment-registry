@@ -1,6 +1,6 @@
-export const envKeyValidator = (request: any) => request && request.envKey && typeof request.envKey === 'string';
+export const isEnvKeyValid = (request: any) => request && request.envKey && typeof request.envKey === 'string';
 
-export const envValidator = (request: any) => {
+export const isEnvValid = (request: any) => {
   return request && request.env && request.env.accessPoints && request.env.accessPoints[0];
 };
 
