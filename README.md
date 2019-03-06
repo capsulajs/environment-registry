@@ -6,9 +6,23 @@ project/service environment.
 An environment is an object that contains an `envKey` and an `env`
 (which is an array of `accessPoints`)
 
+The service exposes two methods: `register` and `environments$`
+
 _Examples :_
 
 ```js
+envRegistry.register({
+  envKey: 'myEnvName',
+  env:
+    accessPoints: [
+      { url: 'http://accessPoint/myEnvName/service1' },
+      { url: 'http://accessPoint/myEnvName/service2' },
+      { url: 'http://accessPoint/myEnvName/serviceN' }
+    ]
+});
+
+envRegistry.environments$({}).subscribe(console.log);
+// Output
 {
   envKey: 'develop',
   env: accessPoints [
