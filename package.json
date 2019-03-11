@@ -1,5 +1,5 @@
 {
-  "name": "environment-registry",
+  "name": "@capsulajs/environment-registry",
   "version": "0.0.1",
   "description": "A service used in Capsula-Hub to register environments on demand ",
   "repository": "git@github.com:capsulajs/environment-registry.git",
