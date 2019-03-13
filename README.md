@@ -4,25 +4,36 @@ This service allows to register and load different versions of a
 project/service environment.
 
 An environment is an object that contains an `envKey` and an `env`
-(which is an array of `accessPoints`)
+(which is an array of `accessPoints`).
 
-_Install it_ (coming soon)
+The service exposes two methods: `register` and `environments$`.
+
+The service requires a token to store the data.
+
+This service will be able to be called by a CI-CD pipeline in order to keep at
+disposal each version of projects/services automatically after pushing
+modifications.
+
+#### Installation (coming soon)
 
 ```bash
 yarn add @capsulajs/environment-registry
+```
+
+or
+
+```bash
 npm i @capsulajs/environment-registry
 ```
 
-The service exposes two methods: `register` and `environments$`.
-The service requires a token to store the data.
-
-_Examples :_
+#### Basic usage
 
 ```js
 import { EnvRegistry } from '@capsulajs/environment-registry';
 
 const envRegistry = new EnvRegistry('my-token');
 
+// Register an environment
 envRegistry.register({
   envKey: 'myEnvName',
   env:
@@ -33,7 +44,9 @@ envRegistry.register({
     ]
 });
 
+// Getting environments
 envRegistry.environments$({}).subscribe(console.log);
+
 // Output
 {
   envKey: 'develop',
@@ -53,12 +66,8 @@ envRegistry.environments$({}).subscribe(console.log);
 }
 ```
 
-This service will be able to be called by a CI-CD pipeline in order to keep at
-disposal each version of projects/services automatically after pushing
-modifications.
-
 #### To Do
 
 <!-- prettier-ignore -->
-  - Add logic to select the provider (local storage, file, configuration service, ...)
-  - Create an entry point to use in CI
+- Add logic to select the provider (local storage, file, configuration service, ...)
+- Create an entry point to use in CI
