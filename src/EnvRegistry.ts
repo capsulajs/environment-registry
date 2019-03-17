@@ -27,11 +27,11 @@ export default class EnvRegistry implements EnvRegistryInterface {
   }
 
   public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
-    if (!isEnvValid(registerRequest)) {
-      return Promise.reject(new Error(validationMessages.envIsNotCorrect));
-    }
     if (!isEnvKeyValid(registerRequest)) {
       return Promise.reject(new Error(validationMessages.envKeyIsNotCorrect));
+    }
+    if (!isEnvValid(registerRequest)) {
+      return Promise.reject(new Error(validationMessages.envIsNotCorrect));
     }
 
     if (!this.repositoryCreated) {

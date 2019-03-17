@@ -45,10 +45,43 @@ describe('Register test suite', () => {
   it('Calling register method with an envKey already registered processes to update', async (done) => {
     expect.assertions(3);
     const devEnv = {
-      accessPoints: [{ url: 'http://accessPoint/dev/service1' }, { url: 'http://accessPoint/dev/service2' }],
+      services: [
+        {
+          serviceName: 'service1',
+          url: 'http://accessPoint/dev/service1',
+          methods: {
+            myTestMethod1: { asyncModel: 'Promise' },
+          },
+        },
+        {
+          serviceName: 'service2',
+          url: 'http://accessPoint/dev/service2',
+          methods: {
+            myTestMethod1: { asyncModel: 'Promise' },
+            myTestMethod2: { asyncModel: 'Observable' },
+            myTestMethod3: { asyncModel: 'Observable' },
+          },
+        },
+      ],
     };
     const masterEnv = {
-      accessPoints: [{ url: 'http://accessPoint/master/service1' }, { url: 'http://accessPoint/master/service2' }],
+      services: [
+        {
+          serviceName: 'service1',
+          url: 'http://accessPoint/master/service1',
+          methods: {
+            myTestMethod1: { asyncModel: 'Promise' },
+          },
+        },
+        {
+          serviceName: 'service2',
+          url: 'http://accessPoint/master/service2',
+          methods: {
+            myTestMethod1: { asyncModel: 'Promise' },
+            myTestMethod2: { asyncModel: 'Observable' },
+          },
+        },
+      ],
     };
     // @ts-ignore
     const createRepoSpy = jest.spyOn(envRegistry, 'createRepository');
