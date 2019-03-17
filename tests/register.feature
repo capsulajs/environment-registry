@@ -30,8 +30,31 @@ Scenario: Calling register method with invalid env
          |['test']       |
          |{}             |
          |{ test: 'test'}|
-         |{ accessPoints: [] }|
+         |{ services: [] }|
   Then  The validation error 'envIsNotCorrect' is returned
+
+Scenario: Calling register method with a valid env, invalid env serviceName.
+  Given   Environment Registry with register method
+  When    User calls register method by providing a valid envKey
+  And     Env modelis in the correct structure
+  But     User provides the following values for <serviceName>
+         |serviceName    |
+         |null           |
+         |undefined      |
+         |123            |
+         |'test'         |
+         |[]             |
+         |['test']       |
+         |{}             |
+         |{ test: 'test'}|
+         |{ services: [] }|
+  Then    Validation error 'env serviceName should be a string' is returned
+
+Scenario: Calling register method with a valid env, invalid env serviceUrl.
+
+Scenario: Calling register method with a valid env, invalid env serviceMethods.
+
+Scenario: Calling register method with a valid env, env method value does not comply with the model.  
 
 Scenario: Calling register method with an envKey already registered
   Given Environment Registry with register method
