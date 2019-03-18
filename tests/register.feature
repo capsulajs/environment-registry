@@ -88,7 +88,7 @@ Scenario: Calling register method with a valid env, env method value comply with
   Given   Environment Registry with register method
   When    User calls register method by providing a valid envKey
   And     Env model is in the correct structure
-  But     <myPropName> object property is not valid
+  But     methods object <property> is not valid
          |myPropName     |
          |null           |
          |undefined      |
