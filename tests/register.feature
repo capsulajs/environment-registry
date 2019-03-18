@@ -36,7 +36,7 @@ Scenario: Calling register method with invalid env
 Scenario: Calling register method with a valid env, invalid env serviceName.
   Given   Environment Registry with register method
   When    User calls register method by providing a valid envKey
-  And     Env modelis in the correct structure
+  And     Env model is in the correct structure
   But     User provides the following values for <serviceName>
          |serviceName    |
          |null           |
@@ -51,10 +51,55 @@ Scenario: Calling register method with a valid env, invalid env serviceName.
   Then    Validation error 'env serviceName should be a string' is returned
 
 Scenario: Calling register method with a valid env, invalid env serviceUrl.
+  Given   Environment Registry with register method
+  When    User calls register method by providing a valid envKey
+  And     Env model is in the correct structure
+  But     User provides the following values for <serviceUrl>
+         |serviceUrl    |
+         |null           |
+         |undefined      |
+         |123            |
+         |'test'         |
+         |[]             |
+         |['test']       |
+         |{}             |
+         |{ test: 'test'}|
+         |{ services: [] }|
+  Then    Validation error 'env serviceName should be a string' is returned
 
 Scenario: Calling register method with a valid env, invalid env serviceMethods.
+  Given   Environment Registry with register method
+  When    User calls register method by providing a valid envKey
+  And     Env model is in the correct structure
+  But     User provides the following values for <serviceMethods>
+         |serviceMethods |
+         |null           |
+         |undefined      |
+         |123            |
+         |'test'         |
+         |[]             |
+         |['test']       |
+         |{}             |
+         |{ test: 'test'}|
+         |{ services: [] }|
+  Then    Validation error 'env serviceName should be a string' is returned
 
-Scenario: Calling register method with a valid env, env method value does not comply with the model.  
+Scenario: Calling register method with a valid env, env method value comply with the model.  
+  Given   Environment Registry with register method
+  When    User calls register method by providing a valid envKey
+  And     Env model is in the correct structure
+  But     <myPropName> object property is not valid
+         |myPropName     |
+         |null           |
+         |undefined      |
+         |123            |
+         |'test'         |
+         |[]             |
+         |['test']       |
+         |{}             |
+         |{ test: 'test'}|
+         |{ services: [] }|
+  Then    Validation error 'env method value should be "Promise" or "Observable"' is returned
 
 Scenario: Calling register method with an envKey already registered
   Given Environment Registry with register method
