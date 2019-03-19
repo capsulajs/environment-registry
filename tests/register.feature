@@ -42,13 +42,11 @@ Scenario: Calling register method with a valid env, invalid env serviceName.
          |null           |
          |undefined      |
          |123            |
-         |'test'         |
          |[]             |
          |['test']       |
          |{}             |
          |{ test: 'test'}|
-         |{ services: [] }|
-  Then    Validation error 'env serviceName should be a string' is returned
+  Then    The validation error 'envIsNotCorrect' is returned
 
 Scenario: Calling register method with a valid env, invalid env serviceUrl.
   Given   Environment Registry with register method
@@ -59,13 +57,11 @@ Scenario: Calling register method with a valid env, invalid env serviceUrl.
          |null           |
          |undefined      |
          |123            |
-         |'test'         |
          |[]             |
          |['test']       |
          |{}             |
          |{ test: 'test'}|
-         |{ services: [] }|
-  Then    Validation error 'env serviceName should be a string' is returned
+  Then    The validation error 'envIsNotCorrect' is returned
 
 Scenario: Calling register method with a valid env, invalid env serviceMethods.
   Given   Environment Registry with register method
@@ -79,12 +75,10 @@ Scenario: Calling register method with a valid env, invalid env serviceMethods.
          |'test'         |
          |[]             |
          |['test']       |
-         |{}             |
          |{ test: 'test'}|
-         |{ services: [] }|
-  Then    Validation error 'env serviceName should be a string' is returned
+  Then    The validation error 'envIsNotCorrect' is returned
 
-Scenario: Calling register method with a valid env, env method value comply with the model.  
+Scenario: Calling register method with a valid env, env method value comply with the model.
   Given   Environment Registry with register method
   When    User calls register method by providing a valid envKey
   And     Env model is in the correct structure
@@ -99,7 +93,7 @@ Scenario: Calling register method with a valid env, env method value comply with
          |{}             |
          |{ test: 'test'}|
          |{ services: [] }|
-  Then    Validation error 'env method value should be "Promise" or "Observable"' is returned
+  Then   The validation error 'envIsNotCorrect' is returned
 
 Scenario: Calling register method with an envKey already registered
   Given Environment Registry with register method
