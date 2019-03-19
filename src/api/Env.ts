@@ -16,4 +16,4 @@ export interface EnvServiceMethods {
   [methodName: string]: { asyncModel: AsyncModelType };
 }
 
-type AsyncModelType = 'Promise' | 'Observable';
+type AsyncModelType = 'RequestResponse' | 'RequestStream';
