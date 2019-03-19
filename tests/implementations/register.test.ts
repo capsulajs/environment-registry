@@ -33,11 +33,23 @@ describe('Register test suite', () => {
         .catch((err: Error) => expect(err).toEqual(new Error(validationMessages.envKeyIsNotCorrect)));
     });
 
-    const badEnvValues = [null, undefined, 123, 'test', [], ['test'], {}, { test: 'test' }, { accessPoints: [] }];
+    const badEnvValues = [null, undefined, 123, 'test', [], ['test'], {}, { test: 'test' }, { services: [] }];
     badEnvValues.forEach((env) => {
       envRegistry
         // @ts-ignore
         .register({ envKey: 'master', env })
+        .catch((err: Error) => expect(err).toEqual(new Error(validationMessages.envIsNotCorrect)));
+    });
+  });
+
+  it('Calling register method with providing valid envKey but Env', () => {
+    expect.assertions(7);
+    const validService = { serviceName: 'ok', url: 'ok', methods: {} };
+    const wrongValues = [null, undefined, 123, [], ['test'], {}, { test: 'test' }];
+    wrongValues.forEach((value) => {
+      envRegistry
+        // @ts-ignore
+        .register({ envKey: 'master', env: { services: [{ ...validService, serviceName: value }] } })
         .catch((err: Error) => expect(err).toEqual(new Error(validationMessages.envIsNotCorrect)));
     });
   });
