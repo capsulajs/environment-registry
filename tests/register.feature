@@ -78,21 +78,27 @@ Scenario: Calling register method with a valid env, invalid env serviceMethods.
          |{ test: 'test'}|
   Then    The validation error 'envIsNotCorrect' is returned
 
-Scenario: Calling register method with a valid env, env method value comply with the model.
+Scenario: Calling register method with a valid env, env service method entry doesn't comply with the model.
   Given   Environment Registry with register method
   When    User calls register method by providing a valid envKey
   And     Env model is in the correct structure
-  But     methods object <property> is not valid
-         |<property>     |
-         |null           |
-         |undefined      |
-         |123            |
-         |'test'         |
-         |[]             |
-         |['test']       |
-         |{}             |
-         |{ test: 'test'}|
-         |{ services: [] }|
+  And     Env service methods entry is not empty Object
+  But     methods object <entry> is not valid
+         |<entry>                  |
+         |null                     |
+         |undefined                |
+         |123                      |
+         |'test'                   |
+         |[]                       |
+         |['test']                 |
+         |{}                       |
+         |{ test: 'test'}          |
+         |{ asyncModel: [] }       |
+         |{ asyncModel: {} }       |
+         |{ asyncModel: 42 }       |
+         |{ asyncModel: 'random' } |
+         |{ asyncModel: null }     |
+         |{ asyncModel: undefined }|
   Then   The validation error 'envIsNotCorrect' is returned
 
 Scenario: Calling register method with an envKey already registered
