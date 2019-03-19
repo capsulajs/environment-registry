@@ -85,14 +85,6 @@ Scenario: Calling register method with a valid env, env service method entry doe
   And     Env service methods entry is not empty Object
   But     methods object <entry> is not valid
          |<entry>                  |
-         |null                     |
-         |undefined                |
-         |123                      |
-         |'test'                   |
-         |[]                       |
-         |['test']                 |
-         |{}                       |
-         |{ test: 'test'}          |
          |{ asyncModel: [] }       |
          |{ asyncModel: {} }       |
          |{ asyncModel: 42 }       |
