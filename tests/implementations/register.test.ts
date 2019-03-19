@@ -42,7 +42,7 @@ describe('Register test suite', () => {
     });
   });
 
-  it('Calling register method with providing valid envKey but Env', () => {
+  it('Calling register method with a valid env but invalid env service serviceName', () => {
     expect.assertions(7);
     const validService = { serviceName: 'ok', url: 'ok', methods: {} };
     const wrongValues = [null, undefined, 123, [], ['test'], {}, { test: 'test' }];
@@ -50,6 +50,49 @@ describe('Register test suite', () => {
       envRegistry
         // @ts-ignore
         .register({ envKey: 'master', env: { services: [{ ...validService, serviceName: value }] } })
+        .catch((err: Error) => expect(err).toEqual(new Error(validationMessages.envIsNotCorrect)));
+    });
+  });
+
+  it('Calling register method with a valid env but invalid env service url', () => {
+    expect.assertions(7);
+    const validService = { serviceName: 'ok', url: 'ok', methods: {} };
+    const wrongValues = [null, undefined, 123, [], ['test'], {}, { test: 'test' }];
+    wrongValues.forEach((value) => {
+      envRegistry
+        // @ts-ignore
+        .register({ envKey: 'master', env: { services: [{ ...validService, url: value }] } })
+        .catch((err: Error) => expect(err).toEqual(new Error(validationMessages.envIsNotCorrect)));
+    });
+  });
+
+  it('Calling register method with a valid env but invalid env service methods', () => {
+    expect.assertions(7);
+    const validService = { serviceName: 'ok', url: 'ok', methods: {} };
+    const wrongValues = [null, undefined, 123, 'test', [], ['test'], { test: 'test' }];
+    wrongValues.forEach((value) => {
+      envRegistry
+        // @ts-ignore
+        .register({ envKey: 'master', env: { services: [{ ...validService, methods: value }] } })
+        .catch((err: Error) => expect(err).toEqual(new Error(validationMessages.envIsNotCorrect)));
+    });
+  });
+
+  it("Calling register method with a valid env but env service method entry doesn't comply with the model", () => {
+    expect.assertions(6);
+    const validService = { serviceName: 'ok', url: 'ok', methods: {} };
+    const wrongValues = [
+      { asyncModel: [] },
+      { asyncModel: {} },
+      { asyncModel: 42 },
+      { asyncModel: 'random' },
+      { asyncModel: null },
+      { asyncModel: undefined },
+    ];
+    wrongValues.forEach((value) => {
+      envRegistry
+        // @ts-ignore
+        .register({ envKey: 'master', env: { services: [{ ...validService, url: value }] } })
         .catch((err: Error) => expect(err).toEqual(new Error(validationMessages.envIsNotCorrect)));
     });
   });
@@ -82,15 +125,15 @@ describe('Register test suite', () => {
           serviceName: 'service1',
           url: 'http://accessPoint/master/service1',
           methods: {
-            myTestMethod1: { asyncModel: 'Promise' },
+            myTestMethod1: { asyncModel: 'RequestResponse' },
           },
         },
         {
           serviceName: 'service2',
           url: 'http://accessPoint/master/service2',
           methods: {
-            myTestMethod1: { asyncModel: 'Promise' },
-            myTestMethod2: { asyncModel: 'Observable' },
+            myTestMethod1: { asyncModel: 'RequestResponse' },
+            myTestMethod2: { asyncModel: 'RequestStream' },
           },
         },
       ],

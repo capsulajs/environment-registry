@@ -30,11 +30,15 @@ const isEnvServiceNameValid = (serviceName: string) => serviceName && typeof ser
 const isEnvUrlValid = (url: string) => url && typeof url === 'string';
 const isEnvMethodsValid = (methods: EnvServiceMethods) => {
   let isValid = true;
-  Object.entries(methods).forEach((method) => {
-    if (method[1] && method[1].asyncModel !== 'Promise' && method[1].asyncModel !== 'Observable') {
-      isValid = false;
-    }
-  });
+  if (methods.constructor !== Object) {
+    isValid = false;
+  } else {
+    Object.entries(methods).forEach((method) => {
+      if (method[1] && method[1].asyncModel !== 'RequestResponse' && method[1].asyncModel !== 'RequestStream') {
+        isValid = false;
+      }
+    });
+  }
   return isValid;
 };
 
