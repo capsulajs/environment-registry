@@ -13,7 +13,11 @@ export interface EnvService {
 }
 
 export interface EnvServiceMethods {
-  [methodName: string]: { asyncModel: AsyncModelType };
+  [methodName: string]: EnvServiceMethod;
 }
 
-type AsyncModelType = 'RequestResponse' | 'RequestStream';
+export interface EnvServiceMethod {
+  asyncModel: AsyncModelType;
+}
+
+export type AsyncModelType = 'RequestResponse' | 'RequestStream';
