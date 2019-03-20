@@ -12,7 +12,7 @@ import {
   EnvironmentsResponse,
   RegisterResponse,
 } from './api/EnvRegistry';
-import { isEnvKeyValid, isEnvValid, validationMessages } from './utils';
+import { isEnvKeyValid, isEnvValid, isRegisterRequestValid, validationMessages } from './utils';
 import { ConfigEntry, EntriesResponse } from './types';
 
 export default class EnvRegistry implements EnvRegistryInterface {
@@ -27,6 +27,9 @@ export default class EnvRegistry implements EnvRegistryInterface {
   }
 
   public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
+    if (!isRegisterRequestValid(registerRequest)) {
+      return Promise.reject(new Error(validationMessages.registerRequestIsNotCorrect));
+    }
     if (!isEnvKeyValid(registerRequest)) {
       return Promise.reject(new Error(validationMessages.envKeyIsNotCorrect));
     }

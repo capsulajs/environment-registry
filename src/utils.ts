@@ -1,28 +1,33 @@
-import { EnvService, EnvServiceMethods } from './api/Env';
+import { EnvService, EnvServiceMethod, EnvServiceMethods } from './api/Env';
 
-export const isEnvKeyValid = (request: any) => request && request.envKey && typeof request.envKey === 'string';
-
-export const isEnvValid = (request: any) => {
-  return request && request.env && request.env.services && isEnvServiceValid(request.env.services);
+export const isRegisterRequestValid = (request: any) => {
+  const props = ['envKey', 'env'];
+  return !(
+    !request ||
+    Object.entries(request).length !== 2 ||
+    !props.every((p) => Object.getOwnPropertyNames(request).includes(p))
+  );
 };
+
+export const isEnvKeyValid = (request: any) => typeof request.envKey === 'string';
+
+export const isEnvValid = (request: any) =>
+  Object.entries(request).length === 1 && request.env.services && isEnvServiceValid(request.env.services);
 
 const isEnvServiceValid = (services: EnvService[]) => {
   let isValid = true;
-  if (services.length === 0) {
-    isValid = false;
-  } else {
-    services.forEach((service) => {
-      if (!service.serviceName || !isEnvServiceNameValid(service.serviceName)) {
-        isValid = false;
-      }
-      if (!service.url || !isEnvUrlValid(service.url)) {
-        isValid = false;
-      }
-      if (!service.methods || !isEnvMethodsValid(service.methods)) {
-        isValid = false;
-      }
-    });
-  }
+
+  services.forEach((service) => {
+    if (!service.serviceName || !isEnvServiceNameValid(service.serviceName)) {
+      isValid = false;
+    }
+    if (!service.url || !isEnvUrlValid(service.url)) {
+      isValid = false;
+    }
+    if (!service.methods || !isEnvMethodsValid(service.methods)) {
+      isValid = false;
+    }
+  });
   return isValid;
 };
 
@@ -34,7 +39,7 @@ const isEnvMethodsValid = (methods: EnvServiceMethods) => {
     isValid = false;
   } else {
     Object.entries(methods).forEach((method) => {
-      if (method[1] && method[1].asyncModel !== 'RequestResponse' && method[1].asyncModel !== 'RequestStream') {
+      if (!method[1] || method[1].constructor !== Object || !isEnvMethodValid(method[1])) {
         isValid = false;
       }
     });
@@ -42,7 +47,14 @@ const isEnvMethodsValid = (methods: EnvServiceMethods) => {
   return isValid;
 };
 
+const isEnvMethodValid = (method: EnvServiceMethod) =>
+  Object.entries(method).length === 1 &&
+  method.asyncModel &&
+  (method.asyncModel === 'RequestResponse' || method.asyncModel === 'RequestStream');
+
 export const validationMessages = {
+  registerRequestIsNotCorrect:
+    'registerRequest not provided or not matching this pattern: { envKey: string, env: Env }',
   envKeyIsNotCorrect: 'envKey was not provided or is not a string',
   envIsNotCorrect:
     "env was not provided or doesn't match this pattern: { services: { serviceName: string, url: string, methods: {} }[] }",
