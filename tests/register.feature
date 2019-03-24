@@ -64,6 +64,9 @@ Scenario: Calling register method with invalid env service.
       |{ url: 'http://test.com', methods: {}}                                       |
       |{ serviceName: 'service1', methods: {}}                                      |
       |{ serviceName: 'service1', url: 'http://test.com'}                           |
+      |{ serviceName: 'service1', url: 'http://test.com', otherKey: {},}            |
+      |{ serviceName: 'service1', otherKey: 'http://test.com', methods: {},}        |
+      |{ otherKey: 'service1', url: 'http://test.com', methods: {},}                |
       |{ serviceName: 'service1', url: 'http://test.com', methods: {}, extraKey: 42}|
   Then    The validation error 'envIsNotCorrect' is returned
 
