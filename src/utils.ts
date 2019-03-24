@@ -1,4 +1,5 @@
 import { EnvService, EnvServiceMethod, EnvServiceMethods } from './api/Env';
+import { EnvRegistryItem } from './api/EnvRegistry';
 
 export const isRegisterRequestValid = (request: any) => {
   const props = ['envKey', 'env'];
@@ -9,10 +10,14 @@ export const isRegisterRequestValid = (request: any) => {
   );
 };
 
-export const isEnvKeyValid = (request: any) => typeof request.envKey === 'string';
+export const isEnvKeyValid = (request: EnvRegistryItem) => typeof request.envKey === 'string';
 
-export const isEnvValid = (request: any) =>
-  Object.entries(request.env).length === 1 && request.env.services && isEnvServiceValid(request.env.services);
+export const isEnvValid = (request: EnvRegistryItem) =>
+  request.env &&
+  request.env.constructor === Object &&
+  Object.entries(request.env).length === 1 &&
+  request.env.services &&
+  isEnvServiceValid(request.env.services);
 
 const isEnvServiceValid = (services: EnvService[]) =>
   services.every(
