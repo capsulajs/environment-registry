@@ -1,6 +1,6 @@
 export interface Env {
   /** Env services is an Array of url */
-  services: Array<EnvService>;
+  services: EnvService[];
 }
 
 export interface EnvService {
