@@ -12,24 +12,17 @@ export const isRegisterRequestValid = (request: any) => {
 export const isEnvKeyValid = (request: any) => typeof request.envKey === 'string';
 
 export const isEnvValid = (request: any) =>
-  Object.entries(request).length === 1 && request.env.services && isEnvServiceValid(request.env.services);
+  Object.entries(request.env).length === 1 && request.env.services && isEnvServiceValid(request.env.services);
 
-const isEnvServiceValid = (services: EnvService[]) => {
-  let isValid = true;
-
-  services.forEach((service) => {
-    if (!service.serviceName || !isEnvServiceNameValid(service.serviceName)) {
-      isValid = false;
-    }
-    if (!service.url || !isEnvUrlValid(service.url)) {
-      isValid = false;
-    }
-    if (!service.methods || !isEnvMethodsValid(service.methods)) {
-      isValid = false;
-    }
-  });
-  return isValid;
-};
+const isEnvServiceValid = (services: EnvService[]) =>
+  services.every(
+    (service) =>
+      service.constructor === Object &&
+      Object.entries(service).length === 3 &&
+      !(!service.serviceName || !isEnvServiceNameValid(service.serviceName)) &&
+      !(!service.url || !isEnvUrlValid(service.url)) &&
+      !(!service.methods || !isEnvMethodsValid(service.methods))
+  );
 
 const isEnvServiceNameValid = (serviceName: string) => serviceName && typeof serviceName === 'string';
 const isEnvUrlValid = (url: string) => url && typeof url === 'string';

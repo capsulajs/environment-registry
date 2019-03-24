@@ -107,11 +107,14 @@ describe('Register test suite', () => {
   });
 
   it('Calling register method with invalid env service', () => {
-    expect.assertions(4);
+    expect.assertions(7);
     const invalidService = [
       { url: 'http://test.com', methods: {} },
       { serviceName: 'service1', methods: {} },
       { serviceName: 'service1', url: 'http://test.com' },
+      { serviceName: 'service1', url: 'http://test.com', otherKey: {} },
+      { serviceName: 'service1', otherKey: 'http://test.com', methods: {} },
+      { otherKey: 'service1', url: 'http://test.com', methods: {} },
       { serviceName: 'service1', url: 'http://test.com', methods: {}, extraKey: 42 },
     ];
 
@@ -195,16 +198,16 @@ describe('Register test suite', () => {
           serviceName: 'service1',
           url: 'http://accessPoint/dev/service1',
           methods: {
-            myTestMethod1: { asyncModel: 'Promise' },
+            myTestMethod1: { asyncModel: 'RequestResponse' },
           },
         },
         {
           serviceName: 'service2',
           url: 'http://accessPoint/dev/service2',
           methods: {
-            myTestMethod1: { asyncModel: 'Promise' },
-            myTestMethod2: { asyncModel: 'Observable' },
-            myTestMethod3: { asyncModel: 'Observable' },
+            myTestMethod1: { asyncModel: 'RequestResponse' },
+            myTestMethod2: { asyncModel: 'RequestStream' },
+            myTestMethod3: { asyncModel: 'RequestStream' },
           },
         },
       ],
