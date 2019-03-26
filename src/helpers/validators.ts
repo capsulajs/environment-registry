@@ -37,8 +37,8 @@ const isEnvServiceValid = (services: EnvService[]) =>
       isEnvMethodsValid(service.methods)
   );
 
-const isEnvServiceNameValid = (serviceName: string): Boolean => typeof serviceName === 'string';
-const isEnvUrlValid = (url: string): Boolean => typeof url === 'string';
+const isEnvServiceNameValid = (serviceName: string): boolean => typeof serviceName === 'string';
+const isEnvUrlValid = (url: string): boolean => typeof url === 'string';
 const isEnvMethodsValid = (methods: EnvServiceMethods) =>
   methods && methods.constructor === Object && Object.values(methods).every(isEnvMethodValid);
 
