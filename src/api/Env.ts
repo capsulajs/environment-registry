@@ -1,5 +1,12 @@
+/**
+ * @interface Env
+ * Env contains environments details.
+ */
 export interface Env {
-  /** Env services is an Array of url */
+  /**
+   * @property services
+   * Env services is an Array of url
+   */
   services: EnvService[];
 }
 

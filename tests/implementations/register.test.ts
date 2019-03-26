@@ -1,6 +1,6 @@
 import EnvRegistry from '../../src/EnvRegistry';
 import { environments } from '../helpers/mocks';
-import { validationMessages } from '../../src/utils';
+import { validationMessages } from '../../src/helpers/constants';
 import { AsyncModelType } from '../../src/api/Env';
 
 describe('Register test suite', () => {

@@ -12,8 +12,9 @@ import {
   EnvironmentsResponse,
   RegisterResponse,
 } from './api/EnvRegistry';
-import { isEnvKeyValid, isEnvValid, isRegisterRequestValid, validationMessages } from './utils';
+import { isEnvKeyValid, isEnvValid, isRegisterRequestValid } from './helpers/validators';
 import { ConfigEntry, EntriesResponse } from './types';
+import { validationMessages } from './helpers/constants';
 
 export default class EnvRegistry implements EnvRegistryInterface {
   private configurationService: ConfigurationService;
@@ -42,7 +43,11 @@ export default class EnvRegistry implements EnvRegistryInterface {
         await this.createRepository();
         this.repositoryCreated = true;
       } catch (e) {
-        e.message === messages.repositoryAlreadyExists ? (this.repositoryCreated = true) : new Error(e);
+        if (e.message === messages.repositoryAlreadyExists) {
+          this.repositoryCreated = true;
+        } else {
+          return Promise.reject(new Error(e));
+        }
       }
     }
     return this.save({ key: registerRequest.envKey, value: registerRequest.env });
