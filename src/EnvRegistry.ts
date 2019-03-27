@@ -12,8 +12,9 @@ import {
   EnvironmentsResponse,
   RegisterResponse,
 } from './api/EnvRegistry';
-import { isEnvKeyValid, isEnvValid, validationMessages } from './utils';
+import { isEnvKeyValid, isEnvValid, isRegisterRequestValid } from './helpers/validators';
 import { ConfigEntry, EntriesResponse } from './types';
+import { validationMessages } from './helpers/constants';
 
 export default class EnvRegistry implements EnvRegistryInterface {
   private configurationService: ConfigurationService;
@@ -27,11 +28,15 @@ export default class EnvRegistry implements EnvRegistryInterface {
   }
 
   public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
-    if (!isEnvValid(registerRequest)) {
-      return Promise.reject(new Error(validationMessages.envIsNotCorrect));
+    if (!isRegisterRequestValid(registerRequest)) {
+      return Promise.reject(new Error(validationMessages.registerRequestIsNotCorrect));
     }
-    if (!isEnvKeyValid(registerRequest)) {
+    const { envKey, env } = registerRequest;
+    if (!isEnvKeyValid(envKey)) {
       return Promise.reject(new Error(validationMessages.envKeyIsNotCorrect));
+    }
+    if (!isEnvValid(env)) {
+      return Promise.reject(new Error(validationMessages.envIsNotCorrect));
     }
 
     if (!this.repositoryCreated) {
@@ -39,10 +44,14 @@ export default class EnvRegistry implements EnvRegistryInterface {
         await this.createRepository();
         this.repositoryCreated = true;
       } catch (e) {
-        e.message === messages.repositoryAlreadyExists ? (this.repositoryCreated = true) : new Error(e);
+        if (e.message === messages.repositoryAlreadyExists) {
+          this.repositoryCreated = true;
+        } else {
+          return Promise.reject(new Error(e));
+        }
       }
     }
-    return this.save({ key: registerRequest.envKey, value: registerRequest.env });
+    return this.save({ key: envKey, value: env });
   }
 
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
