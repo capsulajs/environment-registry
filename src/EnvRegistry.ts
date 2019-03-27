@@ -31,10 +31,11 @@ export default class EnvRegistry implements EnvRegistryInterface {
     if (!isRegisterRequestValid(registerRequest)) {
       return Promise.reject(new Error(validationMessages.registerRequestIsNotCorrect));
     }
-    if (!isEnvKeyValid(registerRequest)) {
+    const { envKey, env } = registerRequest;
+    if (!isEnvKeyValid(envKey)) {
       return Promise.reject(new Error(validationMessages.envKeyIsNotCorrect));
     }
-    if (!isEnvValid(registerRequest)) {
+    if (!isEnvValid(env)) {
       return Promise.reject(new Error(validationMessages.envIsNotCorrect));
     }
 
@@ -50,7 +51,7 @@ export default class EnvRegistry implements EnvRegistryInterface {
         }
       }
     }
-    return this.save({ key: registerRequest.envKey, value: registerRequest.env });
+    return this.save({ key: envKey, value: env });
   }
 
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
