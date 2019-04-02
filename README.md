@@ -114,5 +114,5 @@ Output:
 
 #### To Do
 
-- Add logic to select the provider (local storage, file, configuration service, ...)
-- Create an entry point to use in CI
+-   Add logic to select the provider (local storage, file, configuration service, ...)
+-   Create an entry point to use in CI
