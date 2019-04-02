@@ -14,7 +14,7 @@
     "test": "jest --maxWorkers=4 --env=jsdom",
     "lint": "yarn lint:md && yarn lint:ts",
     "lint:md": "remark . --output",
-    "lint:ts": "tslint -p tsconfig.json",
+    "lint:ts": "tslint -p tsconfig.lint.json",
     "lint:fix": "yarn lint --fix",
     "prettier": "prettier --write '{src,tests}/**/*.{ts,tsx,js,jsx}'"
   },
