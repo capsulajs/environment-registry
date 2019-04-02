@@ -5,7 +5,11 @@
   "repository": "git@github.com:capsulajs/environment-registry.git",
   "author": "MikeSquall <michael.arbib@om2.com>",
   "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
+    "build:ts": "tsc -p tsconfig.json",
+    "build": "yarn build:ts",
     "doc": "typedoc ./src/api --out ./doc --mode file --name 'CapsulaJS - Environmet Registry' --hideGenerator",
     "test": "jest --maxWorkers=4 --env=jsdom",
     "lint": "yarn lint:md && yarn lint:ts",

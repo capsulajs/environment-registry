@@ -1,4 +1,4 @@
-import EnvRegistry from '../../src/EnvRegistry';
+import { EnvRegistry } from '../../src';
 import { environments } from '../helpers/mocks';
 import { validationMessages } from '../../src/helpers/constants';
 import { AsyncModelType } from '../../src/api/Env';
