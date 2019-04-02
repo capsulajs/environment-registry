@@ -14,7 +14,7 @@ This service will be able to be called by a CI-CD pipeline in order to keep at
 disposal each version of projects/services automatically after pushing
 modifications.
 
-#### Installation (coming soon)
+#### Installation
 
 ```bash
 yarn add @capsulajs/environment-registry
