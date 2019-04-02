@@ -36,34 +36,80 @@ const envRegistry = new EnvRegistry('my-token');
 // Register an environment
 envRegistry.register({
   envKey: 'myEnvName',
-  env:
-    accessPoints: [
-      { url: 'http://accessPoint/myEnvName/service1' },
-      { url: 'http://accessPoint/myEnvName/service2' },
-      { url: 'http://accessPoint/myEnvName/serviceN' }
-    ]
+  env: {
+    services: [
+      {
+        serviceName: 'service1',
+        url: 'http://accessPoint/service1',
+        methods: {
+          myTestMethod1: { asyncModel: 'RequestResponse' },
+        },
+      },
+      {
+        serviceName: 'service2',
+        url: 'http://accessPoint/service2',
+        methods: {
+          myTestMethod1: { asyncModel: 'RequestResponse' },
+          myTestMethod2: { asyncModel: 'RequestStream' },
+          myTestMethod3: { asyncModel: 'RequestStream' },
+        },
+      },
+    ],
+  },
 });
 
 // Getting environments
 envRegistry.environments$({}).subscribe(console.log);
+```
 
-// Output
-{
-  envKey: 'develop',
-  env: accessPoints [
-    { url: 'http://url-to-my-service/develop/service-1'},
-    { url: 'http://url-to-my-service/develop/service-2'},
-    { url: 'http://url-to-my-service/develop/service-3'},
-    { url: 'http://url-to-my-service/develop/service-4'},
-  ]
+Output:
+
+```json
+({
+  "envKey": "develop",
+  "env": {
+    "services": [
+      {
+        "serviceName": "service1",
+        "url": "http://accessPoint/service1",
+        "methods": {
+          "myTestMethod1": { "asyncModel": "RequestResponse" }
+        }
+      },
+      {
+        "serviceName": "service1",
+        "url": "http://accessPoint/service1",
+        "methods": {
+          "myTestMethod1": { "asyncModel": "RequestResponse" }
+        }
+      }
+    ]
+  }
 },
 {
-  envKey: 'my-tag',
-  env: accessPoints [
-    { url: 'http://url-to-my-service/my-tag/service-1'},
-    { url: 'http://url-to-my-service/my-tag/service-4'},
-  ]
-}
+  "envKey": "my-tag",
+  "env": {
+    "env": {
+      "services": [
+        {
+          "serviceName": "service1",
+          "url": "http://accessPoint/service1",
+          "methods": {
+            "myTestMethod1": { "asyncModel": "RequestResponse" }
+          }
+        },
+        {
+          "serviceName": "service4",
+          "url": "http://accessPoint/service4",
+          "methods": {
+            "myTestMethod1": { "asyncModel": "RequestResponse" },
+            "myTestMethod2": { "asyncModel": "RequestStream" }
+          }
+        }
+      ]
+    }
+  }
+})
 ```
 
 #### To Do
