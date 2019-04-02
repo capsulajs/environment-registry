@@ -16,7 +16,7 @@ import { isEnvKeyValid, isEnvValid, isRegisterRequestValid } from './helpers/val
 import { ConfigEntry, EntriesResponse } from './types';
 import { validationMessages } from './helpers/constants';
 
-export default class EnvRegistry implements EnvRegistryInterface {
+export class EnvRegistry implements EnvRegistryInterface {
   private configurationService: ConfigurationService;
   private repositoryCreated: boolean;
   private readonly repository: string;

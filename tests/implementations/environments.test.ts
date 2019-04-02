@@ -1,4 +1,4 @@
-import EnvRegistry from '../../src/EnvRegistry';
+import { EnvRegistry } from '../../src';
 import { environments } from '../helpers/mocks';
 import { EnvRegistryItem } from '../../src/api/EnvRegistry';
 
