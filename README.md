@@ -114,6 +114,5 @@ Output:
 
 #### To Do
 
-<!-- prettier-ignore -->
 - Add logic to select the provider (local storage, file, configuration service, ...)
 - Create an entry point to use in CI
