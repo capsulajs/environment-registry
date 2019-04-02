@@ -9,7 +9,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build:ts": "tsc -p tsconfig.json",
-    "build": "yarn build:ts",
+    "build": "yarn clean && yarn build:ts",
+    "clean": "rimraf lib",
     "doc": "typedoc ./src/api --out ./doc --mode file --name 'CapsulaJS - Environmet Registry' --hideGenerator",
     "test": "jest --maxWorkers=4 --env=jsdom",
     "lint": "yarn lint:md && yarn lint:ts",
@@ -40,6 +41,7 @@
     "remark-cli": "^6.0.1",
     "remark-lint": "^6.0.4",
     "remark-preset-lint-recommended": "^3.0.2",
+    "rimraf": "^2.6.3",
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
