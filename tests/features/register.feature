@@ -6,7 +6,7 @@ Background:
 
 Scenario: Calling register method registers the environment of the provided envKey and env
   When  User calls register method the <envKey> and <env>
-    |<envKey>  | <env>      |                                                                                                                                                              |
+    |<envKey>  | <env>      |
     |'develop' | environment|
     |'develop' | ' '        |
   Then  Registration of the environment is performed with success
