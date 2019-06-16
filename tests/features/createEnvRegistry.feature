@@ -20,15 +20,14 @@ Scenario: Create EnvRegistry without configProvider - default configProvider is 
 
 Scenario: Create EnvRegistry with non-existent configProvider throws an error
   Given a configuration with "tokenA" that allows access to this configuration
-  And "configProviderA" is not an available configuration type
+  And "configProviderA" is not an `ConfigurationProvider` type
   When create new EnvRegistry with token "tokenA" and configProvider"configProviderA"
-  Then an error is thrown
+  Then a `nonExistentConfigurationProviderError` is thrown
 
 Scenario: Create EnvRegistry with invalid value of configProvider
   Given a configuration with "tokenA" that allows access to this configuration
   When create new EnvRegistry with token "tokenA" and the <configProvider>
     |<configProvider> |
-    |''        |
     |{}        |
     |{ test: 'test' }|
     |[]        |
@@ -38,12 +37,12 @@ Scenario: Create EnvRegistry with invalid value of configProvider
     |false     |
     |0         |
     |-1        |
-  Then an error is thrown
+  Then an `invalidConfigurationProviderError` is thrown
 
 Scenario: Create EnvRegistry with non-existent token
   Given a configuration with "tokenA" that allows access to this configuration using "LocalFileConfigurationProvider"
   When create new EnvRegistry with token "tokenB" and "LocalFileConfigurationProvider" configProvider
-  Then an error is thrown
+  Then a `tokenNotFoundError` is thrown
 
 Scenario: Create EnvRegistry with a token with invalid format
   Given a valid token is a non empty string
@@ -60,4 +59,19 @@ Scenario: Create EnvRegistry with a token with invalid format
     |false     |
     |0         |
     |-1        |
-  Then an error is thrown
+  Then an `invalidTokenError` is thrown
+
+Scenario: Create EnvRegistry with invalid value of dispatcherUrl
+  Given a configuration with "tokenA" that allows access to this configuration
+  When create new EnvRegistry with token "tokenA" and the <dispatcherUrl>
+    |<dispatcherUrl> |
+    |{}        |
+    |{ test: 'test' }|
+    |[]        |
+    |['test']  |
+    |null      |
+    |true      |
+    |false     |
+    |0         |
+    |-1        |
+  Then an `invalidDispatcherUrlError` is thrown
