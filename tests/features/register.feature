@@ -22,8 +22,7 @@ Scenario: Calling register method registers the environment of the provided envK
 Scenario: Calling register method with an envKey already registered
   Given An environment with envKey 'develop' is registered in Environment Registry
   And   The environment 'env' property is `undefined`
-  When  User calls register method with valid env and envKey 'develop'
-  And   with env '123'
+  When  User calls register method with valid env '123' and envKey 'develop'
   Then  The value of the existing env is updated with the new one
   And   Subscribing to environments method returns 123
 
