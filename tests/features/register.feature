@@ -8,8 +8,8 @@ Scenario: Calling register method registers the environment of the provided envK
   Given An environment registry of <type>
   When  User calls register method with the <envKey> and <env>
     |<envKey>  | <env>          | <type>     |
-    |'develop' | undefined      | any        |
-    |'develop' | null           | any        |
+    |'develop' | undefined      | undefined  |
+    |'develop' | null           | object     |
     |'develop' | 123            | number     |
     |'develop' | 'test'         | string     |
     |'develop' | []             | any[]      |
