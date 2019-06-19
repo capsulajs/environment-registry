@@ -5,29 +5,29 @@ Background:
 
 
 Scenario: Calling register method registers the environment of the provided envKey and env
-  Given An environment registry of <type>
+  Given An environment registry
   When  User calls register method with the <envKey> and <env>
-    |<envKey>  | <env>          | <type>     |
-    |'develop' | null           | object     |
-    |'develop' | 123            | number     |
-    |'develop' | 'test'         | string     |
-    |'develop' | []             | any[]      |
-    |'develop' | ['test']       | string[]   |
-    |'develop' | {}             | object     |
-    |'develop' | {test: 'test'} | object     |
+    |<envKey>  | <env>          |
+    |'develop' | null           |
+    |'develop' | 123            |
+    |'develop' | 'test'         |
+    |'develop' | []             |
+    |'develop' | ['test']       |
+    |'develop' | {}             |
+    |'develop' | {test: 'test'} |
   Then  Registration of the environment is performed with success
   And   Subscribing to environments method returns the registered environment
 
 Scenario: Calling register method with undefined env delete the environment of the provided envKey
-  Given An environment registry of <type>
+  Given An environment registry
   When  User calls register method with the <envKey> and <env>
-    |<envKey>  | <env>          | <type>     |
-    |'develop' | 'develop'      | 'test'     |
+    |<envKey>  | <env>          |
+    |'develop' | 'develop'      |
   And  Registration of the environment is performed with success
   And  Subscribing to environments method returns the registered environment
   And User calls again register method with the <envKey> and <env>
-    |<envKey>  | <env>          | <type>     |
-    |'develop' | undefined      | undefined  |
+    |<envKey>  | <env>          |
+    |'develop' | undefined      |
   Then  Registration of the environment is performed with success
   And   This environment is delete from the registry
   And   Subscribing to environments method doesn't return the environment
