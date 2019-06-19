@@ -12,11 +12,11 @@ import {
   EnvironmentsResponse,
   RegisterResponse,
 } from './api/EnvRegistry';
-import { isEnvKeyValid, isEnvValid, isRegisterRequestValid } from './helpers/validators';
+import { isEnvKeyValid, isRegisterRequestValid } from './helpers/validators';
 import { ConfigEntry, EntriesResponse } from './types';
 import { validationMessages } from './helpers/constants';
 
-export class EnvRegistry implements EnvRegistryInterface {
+export class EnvRegistry<T> implements EnvRegistryInterface<T> {
   private configurationService: ConfigurationService;
   private repositoryCreated: boolean;
   private readonly repository: string;
@@ -27,16 +27,13 @@ export class EnvRegistry implements EnvRegistryInterface {
     this.repository = 'environmentRegistry';
   }
 
-  public async register(registerRequest: EnvRegistryItem): Promise<RegisterResponse> {
+  public async register(registerRequest: EnvRegistryItem<T>): Promise<RegisterResponse> {
     if (!isRegisterRequestValid(registerRequest)) {
       return Promise.reject(new Error(validationMessages.registerRequestIsNotCorrect));
     }
     const { envKey, env } = registerRequest;
     if (!isEnvKeyValid(envKey)) {
       return Promise.reject(new Error(validationMessages.envKeyIsNotCorrect));
-    }
-    if (!isEnvValid(env)) {
-      return Promise.reject(new Error(validationMessages.envIsNotCorrect));
     }
 
     if (!this.repositoryCreated) {
@@ -54,10 +51,10 @@ export class EnvRegistry implements EnvRegistryInterface {
     return this.save({ key: envKey, value: env });
   }
 
-  public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse {
+  public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse<T> {
     return from(this.configurationService.entries({ repository: this.repository })).pipe(
       switchMap((response: EntriesResponse) => {
-        return from(response.entries.map((entry) => ({ envKey: entry.key, env: entry.value })));
+        return from(response.entries.map((entry) => ({ envKey: entry.key, env: entry.value } as EnvRegistryItem<T>)));
       })
     );
   }

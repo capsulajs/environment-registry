@@ -1,8 +1,6 @@
-import { Env } from './api/Env';
-
 export interface ConfigEntry {
   key: string;
-  value: Env;
+  value: any;
 }
 
 export interface EntriesResponse {
