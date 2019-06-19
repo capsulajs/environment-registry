@@ -54,8 +54,3 @@ Scenario: Calling register method with invalid envKey
          |{}             |
          |{ test: 'test'}|
   Then  The validation error 'envKeyIsNotCorrect' is returned
-
-Scenario: Calling register method with env which type doesn't match EnvRegistry's declared one
-  Given An environment registry typed with object
-  When  User calls register with envKey: 'develop' and env: 123
-  Then  An 'envTypeNotMatchError' is thrown
