@@ -8,7 +8,6 @@ Scenario: Calling register method registers the environment of the provided envK
   Given An environment registry of <type>
   When  User calls register method with the <envKey> and <env>
     |<envKey>  | <env>          | <type>     |
-    |'develop' | undefined      | undefined  |
     |'develop' | null           | object     |
     |'develop' | 123            | number     |
     |'develop' | 'test'         | string     |
@@ -18,6 +17,20 @@ Scenario: Calling register method registers the environment of the provided envK
     |'develop' | {test: 'test'} | object     |
   Then  Registration of the environment is performed with success
   And   Subscribing to environments method returns the registered environment
+
+Scenario: Calling register method with undefined env delete the environment of the provided envKey
+  Given An environment registry of <type>
+  When  User calls register method with the <envKey> and <env>
+    |<envKey>  | <env>          | <type>     |
+    |'develop' | 'develop'      | 'test'     |
+  And  Registration of the environment is performed with success
+  And  Subscribing to environments method returns the registered environment
+  And User calls again register method with the <envKey> and <env>
+    |<envKey>  | <env>          | <type>     |
+    |'develop' | undefined      | undefined  |
+  Then  Registration of the environment is performed with success
+  And   This environment is delete from the registry
+  And   Subscribing to environments method doesn't return the environment
 
 Scenario: Calling register method with an envKey already registered
   Given An environment with envKey 'develop' is registered in Environment Registry
