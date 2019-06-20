@@ -29,7 +29,7 @@ Scenario: Calling register method with undefined env deletes the environment of 
     |<envKey>  | <env>          |
     |'develop' | undefined      |
   Then  Registration of the environment is performed with success
-  And   This environment is delete from the registry
+  And   This environment is deleted from the registry
   And   Subscribing to environments method doesn't return the environment
 
 Scenario: Calling register method with an envKey already registered
