@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
  * @interface EnvRegistry
  * EnvRegistry provides public methods to manage different versions of projects in CapsulaHub.
  */
-export interface EnvRegistry<T> {
+export interface EnvRegistry<Env> {
   /**
    * @method register
    * Provides a way to save environment.
@@ -12,7 +12,7 @@ export interface EnvRegistry<T> {
    *
    * @return Promise resolved when the registration has been completed
    */
-  register: (registerRequest: EnvRegistryItem<T>) => Promise<RegisterResponse>;
+  register: (registerRequest: EnvRegistryItem<Env>) => Promise<RegisterResponse>;
 
   /**
    * @method environments$
@@ -20,11 +20,11 @@ export interface EnvRegistry<T> {
    *
    * @return An Observable sequence containing the registered environments.
    */
-  environments$: (environmentsRequest: EnvironmentsRequest) => EnvironmentsResponse<T>;
+  environments$: (environmentsRequest: EnvironmentsRequest) => EnvironmentsResponse<Env>;
 }
 
-export interface EnvRegistryItem<T> {
-  env: T;
+export interface EnvRegistryItem<Env> {
+  env: Env;
   envKey: string;
 }
 
@@ -32,4 +32,4 @@ export interface RegisterResponse {}
 
 export interface EnvironmentsRequest {}
 
-export type EnvironmentsResponse<T> = Observable<EnvRegistryItem<T>>;
+export type EnvironmentsResponse<Env> = Observable<EnvRegistryItem<Env>>;

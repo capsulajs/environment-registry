@@ -16,7 +16,7 @@ import { isEnvKeyValid, isRegisterRequestValid } from './helpers/validators';
 import { ConfigEntry, EntriesResponse } from './types';
 import { validationMessages } from './helpers/constants';
 
-export class EnvRegistry<T> implements EnvRegistryInterface<T> {
+export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
   private configurationService: ConfigurationService;
   private repositoryCreated: boolean;
   private readonly repository: string;
@@ -27,7 +27,7 @@ export class EnvRegistry<T> implements EnvRegistryInterface<T> {
     this.repository = 'environmentRegistry';
   }
 
-  public async register(registerRequest: EnvRegistryItem<T>): Promise<RegisterResponse> {
+  public async register(registerRequest: EnvRegistryItem<Env>): Promise<RegisterResponse> {
     if (!isRegisterRequestValid(registerRequest)) {
       return Promise.reject(new Error(validationMessages.registerRequestIsNotCorrect));
     }
@@ -51,10 +51,10 @@ export class EnvRegistry<T> implements EnvRegistryInterface<T> {
     return this.save({ key: envKey, value: env });
   }
 
-  public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse<T> {
+  public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse<Env> {
     return from(this.configurationService.entries({ repository: this.repository })).pipe(
       switchMap((response: EntriesResponse) => {
-        return from(response.entries.map((entry) => ({ envKey: entry.key, env: entry.value } as EnvRegistryItem<T>)));
+        return from(response.entries.map((entry) => ({ envKey: entry.key, env: entry.value } as EnvRegistryItem<Env>)));
       })
     );
   }
