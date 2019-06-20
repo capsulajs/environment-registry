@@ -3,8 +3,7 @@
 This service allows to register and load different versions of a
 project/service environment.
 
-An environment is an object that contains an `envKey` and an `env`
-(which is an array of `accessPoints`).
+An environment is an object that contains an `envKey` and an `env`.
 
 The service exposes two methods: `register` and `environments$`.
 
@@ -65,7 +64,7 @@ envRegistry.environments$({}).subscribe(console.log);
 Output:
 
 ```json
-({
+{
   "envKey": "develop",
   "env": {
     "services": [
@@ -85,7 +84,9 @@ Output:
       }
     ]
   }
-},
+}
+```
+```json
 {
   "envKey": "my-tag",
   "env": {
@@ -109,7 +110,7 @@ Output:
       ]
     }
   }
-})
+}
 ```
 
 #### To Do

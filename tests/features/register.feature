@@ -5,21 +5,34 @@ Background:
 
 
 Scenario: Calling register method registers the environment of the provided envKey and env
-  Given An environment registry of <type>
+  Given An environment registry
   When  User calls register method with the <envKey> and <env>
-    |<envKey>  | <env>          | <type>     |
-    |'develop' | undefined      | undefined  |
-    |'develop' | null           | object     |
-    |'develop' | 123            | number     |
-    |'develop' | 'test'         | string     |
-    |'develop' | []             | any[]      |
-    |'develop' | ['test']       | string[]   |
-    |'develop' | {}             | object     |
-    |'develop' | {test: 'test'} | object     |
+    |<envKey>  | <env>          |
+    |'develop' | null           |
+    |'develop' | 123            |
+    |'develop' | 'test'         |
+    |'develop' | []             |
+    |'develop' | ['test']       |
+    |'develop' | {}             |
+    |'develop' | {test: 'test'} |
   Then  Registration of the environment is performed with success
   And   Subscribing to environments method returns the registered environment
 
-Scenario: Calling register method with an envKey already registered
+Scenario: Calling register with undefined env and envkey already registered - the environment of the provided envKey is deleted
+  Given An environment registry
+  When  User calls register method with the <envKey> and <env>
+    |<envKey>  | <env>          |
+    |'develop' | 'develop'      |
+  And  Registration of the environment is performed with success
+  And  Subscribing to environments method returns the registered environment
+  And User calls again register method with the <envKey> and <env>
+    |<envKey>  | <env>          |
+    |'develop' | undefined      |
+  Then  Registration of the environment is performed with success
+  And   This environment is deleted from the registry
+  And   Subscribing to environments method doesn't return the environment
+
+Scenario: Calling register with valid env and envKey already registered - the environment of the provided envKey is updated
   Given An environment with envKey 'develop' is registered in Environment Registry
   And   The environment 'env' property is `undefined`
   When  User calls register method with valid env '123' and envKey 'develop'
@@ -41,8 +54,3 @@ Scenario: Calling register method with invalid envKey
          |{}             |
          |{ test: 'test'}|
   Then  The validation error 'envKeyIsNotCorrect' is returned
-
-Scenario: Calling register method with env which type doesn't match EnvRegistry's declared one
-  Given An environment registry typed with object
-  When  User calls register with envKey: 'develop' and env: 123
-  Then  An 'envTypeNotMatchError' is thrown

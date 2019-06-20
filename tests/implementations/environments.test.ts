@@ -3,7 +3,7 @@ import { environments } from '../helpers/mocks';
 import { EnvRegistryItem } from '../../src/api/EnvRegistry';
 
 describe('Environments$ test suite', () => {
-  let envRegistry: EnvRegistry;
+  let envRegistry: EnvRegistry<any>;
 
   beforeEach(async () => {
     localStorage.clear();
@@ -15,7 +15,7 @@ describe('Environments$ test suite', () => {
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async (done) => {
     expect.assertions(4);
-    const receivedEnvs: EnvRegistryItem[] = [];
+    const receivedEnvs: Array<EnvRegistryItem<any>> = [];
     const expectedArray = [
       { envKey: 'tag-1', env: environments['tag-1'] },
       { envKey: 'master', env: environments.master },
@@ -30,7 +30,7 @@ describe('Environments$ test suite', () => {
     await new Promise((resolve) => {
       envRegistry.environments$({}).subscribe(
         (data) => receivedEnvs.push(data),
-        (err) => new Error(err),
+        (err) => err,
         () => {
           expect(receivedEnvs).toHaveLength(3);
           expect(receivedEnvs).toEqual(expect.arrayContaining(expectedArray));
@@ -42,7 +42,7 @@ describe('Environments$ test suite', () => {
     receivedEnvs.length = 0;
     envRegistry.environments$({}).subscribe(
       (data) => receivedEnvs.push(data),
-      (err) => new Error(err),
+      (err) => err,
       () => {
         expect(receivedEnvs).toHaveLength(4);
         expect(receivedEnvs).toEqual(expect.arrayContaining(expectedUpdatedArray));
