@@ -77,7 +77,7 @@ describe('Register test suite', () => {
       .environments$({})
       .subscribe(
         (env) => expect(env).toEqual({ envKey: 'master', env: 'master test' }),
-        (err: any) => new Error(err),
+        (err: Error) => new Error(err),
         () => done()
       );
   });
