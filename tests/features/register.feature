@@ -18,7 +18,7 @@ Scenario: Calling register method registers the environment of the provided envK
   Then  Registration of the environment is performed with success
   And   Subscribing to environments method returns the registered environment
 
-Scenario: Calling register method with undefined env delete the environment of the provided envKey
+Scenario: Calling register method with undefined env deletes the environment of the provided envKey
   Given An environment registry
   When  User calls register method with the <envKey> and <env>
     |<envKey>  | <env>          |
@@ -29,7 +29,7 @@ Scenario: Calling register method with undefined env delete the environment of t
     |<envKey>  | <env>          |
     |'develop' | undefined      |
   Then  Registration of the environment is performed with success
-  And   This environment is delete from the registry
+  And   This environment is deleted from the registry
   And   Subscribing to environments method doesn't return the environment
 
 Scenario: Calling register method with an envKey already registered
