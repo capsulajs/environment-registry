@@ -54,7 +54,7 @@ export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
   public environments$(environmentsRequest: EnvironmentsRequest): EnvironmentsResponse<Env> {
     return from(this.configurationService.entries({ repository: this.repository })).pipe(
       switchMap((response: EntriesResponse) => {
-        return from(response.entries.map((entry) => ({ envKey: entry.key, env: entry.value } as EnvRegistryItem<Env>)));
+        return from(response.entries.map((entry) => ({ envKey: entry.key, env: entry.value })));
       })
     );
   }
