@@ -7,15 +7,50 @@ branches:
   only:
     - /.*/
 
+# Keep the npm cache around to speed up installs
+cache:
+  npm: true
+  directories:
+    - '$HOME/.npm'
+
+before_install:
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
+
 install:
+  - pip install --user awscli
   - yarn install --production=false
+
+before_script:
+  - yarn install
 
 script:
   - yarn lint
-  #  - yarn build
+  - yarn doc
+  - yarn build
+  - 'if [[ $TRAVIS_PULL_REQUEST != "false" ]]; then bash scripts/publish.sh; fi'
   - yarn test
-  # - yarn doc
-  # - bash scripts/publish.sh
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: yarn deploy
+    on:
+      branch: develop
+  - provider: script
+    skip_cleanup: true
+    script: bash scripts/publish.sh
+    on:
+      branch: develop
+  - provider: script
+    skip_cleanup: true
+    script: yarn deploy
+    on:
+      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: bash scripts/publish.sh
+    on:
+      branch: master
 
 notifications:
   email:
