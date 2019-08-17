@@ -29,29 +29,13 @@ if [[ "$TRAVIS_PULL_REQUEST_BRANCH" =~ ^feature\/.*$ ]]; then
     echo "|    Deploying 'snapshot' on npm registry    |"
     echo "--------------------------------------------"
 
-    VERSION_NUMBER=$(npm version | grep @ | sed -re "s/\{ '.*': '(.*)',?/\1/g")
-    VERSION_NUMBER=$(perl -spe 's/(\d+)(?!.*\d+)/$1>$thresh? $1+1 : $1/e' <<< "$VERSION_NUMBER")
-    echo "version      -> $VERSION_NUMBER"
     BRANCH_NAME=$(echo $TRAVIS_PULL_REQUEST_BRANCH | sed "s/[_/]/-/g")
-    echo "branch name  -> $BRANCH_NAME"
     PACKAGE_VERSION="alpha.$(date +%s).$BRANCH_NAME"
-
     npm version prerelease --preid="$PACKAGE_VERSION"
+    git push origin $BRANCH_NAME
     npm publish --tag snapshot --access public
-
-
-
-#    lerna publish --canary --dist-tag snapshot --preid "$PACKAGE_VERSION" --yes
-
-
-
     echo_result "$?"
-
-
-
-
-    lerna run publish:comment -- "alpha" ${PACKAGE_VERSION}
-
+    COMMENT_RESULT=$(bash -c "./publish_comment.sh" $PACKAGE_VERSION)
 elif [[ "$TRAVIS_BRANCH" == "develop" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
     echo "--------------------------------------------"
     echo "|     Deploying 'next' on npm registry      |"
@@ -59,9 +43,9 @@ elif [[ "$TRAVIS_BRANCH" == "develop" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false"
 
     set_git_remote
     git checkout develop
-
-    lerna publish prerelease --canary --preid next --dist-tag next --yes -m '[skip ci]'
-
+    npm version prerelease --preid="next.$(date +%s)"
+    git push origin develop
+    npm publish --tag next --access public
     echo_result "$?"
 
 elif [[ "$TRAVIS_BRANCH" == "master" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
@@ -71,9 +55,9 @@ elif [[ "$TRAVIS_BRANCH" == "master" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" 
 
     set_git_remote
     git checkout master
-
-    lerna publish patch --yes -m '[skip ci]'
-
+    npm version patch
+    git push origin master
+    npm publish --tag latest --access public
     echo_result "$?"
 
 else
