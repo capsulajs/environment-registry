@@ -1,13 +1,15 @@
+import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
 import { EnvRegistry } from '../../src';
 import { environments } from '../helpers/mocks';
+import { Env } from '../helpers/types';
 import { EnvRegistryItem } from '../../src/api/EnvRegistry';
 
 describe('Environments$ test suite', () => {
-  let envRegistry: EnvRegistry<any>;
+  let envRegistry: EnvRegistry<Env>;
 
   beforeEach(async () => {
     localStorage.clear();
-    envRegistry = new EnvRegistry('token');
+    envRegistry = new EnvRegistry({ token: 'token', configProvider: configurationTypes.localStorage });
     await envRegistry.register({ envKey: 'develop', env: environments.develop });
     await envRegistry.register({ envKey: 'master', env: environments.master });
     await envRegistry.register({ envKey: 'tag-1', env: environments['tag-1'] });
@@ -15,7 +17,7 @@ describe('Environments$ test suite', () => {
 
   it('Subscribe to environments$ method returns all available envKeys and Envs', async (done) => {
     expect.assertions(4);
-    const receivedEnvs: Array<EnvRegistryItem<any>> = [];
+    const receivedEnvs: Array<EnvRegistryItem<Env>> = [];
     const expectedArray = [
       { envKey: 'tag-1', env: environments['tag-1'] },
       { envKey: 'master', env: environments.master },

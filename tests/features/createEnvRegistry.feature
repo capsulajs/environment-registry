@@ -39,6 +39,7 @@ Scenario: Create EnvRegistry with invalid value of configProvider
     |-1        |
   Then an `invalidConfigurationProviderError` is thrown
 
+  // Not valid
 Scenario: Create EnvRegistry with non-existent token
   Given a configuration with "tokenA" that allows access to this configuration using "LocalFileConfigurationProvider"
   When create new EnvRegistry with token "tokenB" and "LocalFileConfigurationProvider" configProvider
