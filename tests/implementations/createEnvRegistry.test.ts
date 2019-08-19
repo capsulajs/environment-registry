@@ -1,7 +1,7 @@
 import * as configurationServiceItems from '@capsulajs/capsulajs-configuration-service';
 import { EnvRegistryOptions } from '../../src/api/EnvRegistryOptions';
 import { EnvRegistry } from '../../src';
-import { validationMessages } from '../../src/helpers/constants';
+import { defaultRepository, validationMessages } from '../../src/helpers/constants';
 
 describe('Create EnvRegistry with available configProvider and valid token', () => {
   const getConfigurationServiceClassSpy = jest.spyOn(configurationServiceItems, 'getProvider');
@@ -96,5 +96,18 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
         expect(error).toEqual(new Error(validationMessages.dispatcherUrlIsNotCorrect));
       }
     });
+  });
+
+  it('Repository is applied correctly while the creation of envRegistry', async () => {
+    expect.assertions(2);
+    const repository = 'testRepo';
+    const envRegistry = new EnvRegistry<{ name: string }>({
+      token,
+      configProvider: configurationServiceItems.configurationTypes.localStorage,
+      repository,
+    });
+    await envRegistry.register({ env: { name: 'testEnv' }, envKey: 'testEnv' });
+    expect(localStorage.getItem(`${token}.${repository}`)).toBe('{"testEnv":{"name":"testEnv"}}');
+    expect(localStorage.getItem(`${token}.${defaultRepository}`)).toBe(null);
   });
 });

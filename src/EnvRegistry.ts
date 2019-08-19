@@ -25,7 +25,7 @@ export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
   private readonly repository: string;
 
   constructor({ token, configProvider, dispatcherUrl, repository }: EnvRegistryOptions) {
-    this.configurationService = getConfigurationService(
+    this.configurationService = getConfigurationService<Env>(
       typeof token === 'string' ? token.trim() : '',
       getProvider({
         configProvider: typeof configProvider !== 'undefined' ? configProvider : configurationTypes.httpFile,
