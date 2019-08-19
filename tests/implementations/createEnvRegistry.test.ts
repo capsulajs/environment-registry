@@ -71,10 +71,10 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
 
   it('Create EnvRegistry with a token with invalid format', () => {
     expect.assertions(11);
-    [...invalidArgs, undefined].forEach((token) => {
+    [...invalidArgs, undefined].forEach((invalidToken) => {
       try {
         // @ts-ignore
-        new EnvRegistry({ token, configProvider: configurationServiceItems.configurationTypes.httpFile });
+        new EnvRegistry({ token: invalidToken, configProvider: configurationServiceItems.configurationTypes.httpFile });
       } catch (error) {
         expect(error).toEqual(new Error(configurationServiceItems.messages.tokenNotProvided));
       }
@@ -88,6 +88,7 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
         // @ts-ignore
         new EnvRegistry({
           token,
+          // @ts-ignore
           dispatcherUrl,
           configProvider: configurationServiceItems.configurationTypes.scalecube,
         });
