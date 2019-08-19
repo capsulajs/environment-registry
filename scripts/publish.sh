@@ -30,8 +30,8 @@ if [[ "$TRAVIS_PULL_REQUEST_BRANCH" =~ ^feature\/.*$ ]]; then
     echo "--------------------------------------------"
 
     BRANCH_NAME=$(echo $TRAVIS_PULL_REQUEST_BRANCH | sed "s/[_/]/-/g")
-    PACKAGE_VERSION="alpha.$(date +%s).$BRANCH_NAME"
-    npm version prerelease --preid="$PACKAGE_VERSION"
+    PRE_ID="alpha.$(date +%s).$BRANCH_NAME"
+    PACKAGE_VERSION=$(npm version prerelease --preid="$PRE_ID")
     npm publish --tag snapshot --access public
     echo_result "$?"
     bash -c "./scripts/publish_comment.sh" $PACKAGE_VERSION

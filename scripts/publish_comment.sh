@@ -4,7 +4,7 @@ if [[ "x$PIPELINEDEBUG" != "x" ]]; then
     set -x
 fi
 
-PACKAGE_VERSION=$1
+PACKAGE_VERSION=$(echo $1 | cut -c 2-)
 PACKAGE_NAME="@capsulajs/environment-registry"
 PACKAGE_PAGE="[**npm**](https://www.npmjs.com/package/${PACKAGE_NAME})"
 COMMENTS_CREATION_URL="https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$TRAVIS_PULL_REQUEST/comments"
