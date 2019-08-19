@@ -35,7 +35,7 @@ commentAlreadyExists() {
 
 comment(){
     echo "Links to the published packages generation for PR"
-    COMMENT_TEXT="**Travis-CI** has published $PACKAGE_NAME@$PACKAGE_VERSION-$PACKAGE_SNAPSHOT to $PACKAGE_PAGE"
+    COMMENT_TEXT="**Travis-CI** has published $PACKAGE_NAME@$PACKAGE_VERSION to $PACKAGE_PAGE"
     echo "$COMMENT_TEXT"
 
     # Post comment about package if not commented yet or update it
