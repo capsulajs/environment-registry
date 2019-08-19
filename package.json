@@ -25,7 +25,8 @@
     }
   },
   "dependencies": {
-    "@capsulajs/capsulajs-configuration-service": "^0.1.5",
+    "@capsulajs/capsulajs-configuration-service": "^0.1.14",
+    "@capsulajs/capsulajs-transport-providers": "^0.1.1",
     "@types/node": "^10.12.21",
     "rxjs": "^6.4.0",
     "typedoc": "^0.14.2"

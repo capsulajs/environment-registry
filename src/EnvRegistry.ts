@@ -2,8 +2,9 @@ import { from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import {
   ConfigurationService,
-  ConfigurationServiceLocalStorage,
+  getProvider,
   messages,
+  configurationTypes,
 } from '@capsulajs/capsulajs-configuration-service';
 import {
   EnvRegistry as EnvRegistryInterface,
@@ -14,17 +15,23 @@ import {
 } from './api/EnvRegistry';
 import { isEnvKeyValid, isRegisterRequestValid } from './helpers/validators';
 import { ConfigEntry, EntriesResponse } from './types';
-import { validationMessages } from './helpers/constants';
+import { defaultRepository, validationMessages } from './helpers/constants';
+import { EnvRegistryOptions } from './api/EnvRegistryOptions';
+import { getConfigurationService } from './helpers/utils';
 
 export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
   private configurationService: ConfigurationService;
   private repositoryCreated: boolean;
   private readonly repository: string;
 
-  constructor(token: string) {
-    this.configurationService = new ConfigurationServiceLocalStorage(token); // add logic to choose specific provider
+  constructor({ token, configProvider, dispatcherUrl, repository }: EnvRegistryOptions) {
+    this.configurationService = getConfigurationService(
+      token,
+      getProvider({ configProvider: configProvider || configurationTypes.httpFile }),
+      dispatcherUrl
+    );
     this.repositoryCreated = false;
-    this.repository = 'environmentRegistry';
+    this.repository = repository || defaultRepository;
   }
 
   public async register(registerRequest: EnvRegistryItem<Env>): Promise<RegisterResponse> {
