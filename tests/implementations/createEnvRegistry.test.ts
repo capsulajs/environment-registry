@@ -1,6 +1,7 @@
 import * as configurationServiceItems from '@capsulajs/capsulajs-configuration-service';
 import { EnvRegistryOptions } from '../../src/api/EnvRegistryOptions';
 import { EnvRegistry } from '../../src';
+import { validationMessages } from '../../src/helpers/constants';
 
 describe('Create EnvRegistry with available configProvider and valid token', () => {
   const getConfigurationServiceClassSpy = jest.spyOn(configurationServiceItems, 'getProvider');
@@ -81,8 +82,8 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
   });
 
   it('Create EnvRegistry with invalid value of dispatcherUrl', () => {
-    // expect.assertions(10);
-    [invalidArgs].forEach((dispatcherUrl) => {
+    expect.assertions(10);
+    invalidArgs.forEach((dispatcherUrl) => {
       try {
         // @ts-ignore
         new EnvRegistry({
@@ -91,8 +92,7 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
           configProvider: configurationServiceItems.configurationTypes.scalecube,
         });
       } catch (error) {
-        console.log('error', error);
-        // expect(error).toEqual(new Error(configurationServiceItems.messages.));
+        expect(error).toEqual(new Error(validationMessages.dispatcherUrlIsNotCorrect));
       }
     });
   });
