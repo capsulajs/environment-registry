@@ -34,7 +34,7 @@ if [[ "$TRAVIS_PULL_REQUEST_BRANCH" =~ ^feature\/.*$ ]]; then
     PACKAGE_VERSION=$(npm version prerelease --preid="$PRE_ID")
     npm publish --tag snapshot --access public
     echo_result "$?"
-    bash -c "./scripts/publish_comment.sh" $PACKAGE_VERSION
+    bash -c "./scripts/publish_comment.sh $PACKAGE_VERSION"
 elif [[ "$TRAVIS_BRANCH" == "develop" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
     echo "--------------------------------------------"
     echo "|     Deploying 'next' on npm registry      |"
