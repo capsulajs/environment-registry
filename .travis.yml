@@ -33,19 +33,9 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: yarn deploy
-    on:
-      branch: develop
-  - provider: script
-    skip_cleanup: true
     script: bash scripts/publish.sh
     on:
       branch: develop
-  - provider: script
-    skip_cleanup: true
-    script: yarn deploy
-    on:
-      branch: master
   - provider: script
     skip_cleanup: true
     script: bash scripts/publish.sh
