@@ -9,7 +9,8 @@ Scenario: Create EnvRegistry with available configProvider and valid token
     |ScalecubeConfigurationProvider     | 'dispatcherUrl1'|
     |HttpServerConfigurationProvider    | (empty)         |
     |LocalStorageConfigurationProvider  | (empty)         |
-  When create new EnvRegistry with tokenA, <configProvider> and <dispatcherUrl>
+  And  repository "test"
+  When create new EnvRegistry with tokenA, repository, <configProvider> and <dispatcherUrl>
   Then EnvRegistry is created with the provided configuration provider
 
 Scenario: Create EnvRegistry without configProvider - default configProvider is used
@@ -76,3 +77,26 @@ Scenario: Create EnvRegistry with invalid value of dispatcherUrl
     |0         |
     |-1        |
   Then an `invalidDispatcherUrlError` is thrown
+
+Scenario: Create EnvRegistry with invalid value of repository
+  Given a configuration with "tokenA" that allows access to this configuration
+  When create new EnvRegistry with token "tokenA" and the <repository>
+    |<repository>> |
+    |{}        |
+    |{ test: 'test' }|
+    |[]        |
+    |['test']  |
+    |null      |
+    |true      |
+    |false     |
+    |0         |
+    |-1        |
+  Then an `invalidRepositoryError` is thrown
+
+  Scenario: Default repository is applied correctly while the creation of envRegistry, if no repository is provided
+    Given a configuration with tokenA that allows access to this configuration
+    And  "LocalStorageConfigurationProvider" is the configProvider used
+    And  "testEnv" is default repository
+    When create new EnvRegistry with tokenA
+    Then EnvRegistry is created with "LocalStorageConfigurationProvider"
+    And  "testEnv" repository is applied
