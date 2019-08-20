@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { toArray } from 'rxjs/operators';
 import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
-import { EnvRegistry } from '../../src';
-import { environments } from '../helpers/mocks';
-import { Env } from '../helpers/types';
-import { EnvRegistryItem } from '../../src/api';
+import { EnvRegistry } from '../../../src';
+import { environments } from '../../helpers/mocks';
+import { Env } from '../../helpers/types';
+import { EnvRegistryItem } from '../../../src/api';
 
-describe('Environments$ test suite', () => {
+describe('Environments$ test suite (localStorage)', () => {
   const devData = { envKey: 'develop', env: environments.develop };
   const masterData = { envKey: 'master', env: environments.master };
   const tag1Data = { envKey: 'tag-1', env: environments['tag-1'] };

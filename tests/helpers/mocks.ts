@@ -78,3 +78,8 @@ export const environments: any = {
     ],
   },
 };
+
+export const devData = { envKey: 'develop', env: environments.develop };
+export const masterData = { envKey: 'master', env: environments.master };
+export const tag1Data = { envKey: 'tag-1', env: environments['tag-1'] };
+export const tag2Data = { envKey: 'tag-2', env: environments['tag-2'] };
