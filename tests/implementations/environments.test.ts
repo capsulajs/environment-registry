@@ -126,4 +126,58 @@ describe('Environments$ test suite', () => {
         done();
       });
   });
+
+  it('Subscribe to environments$ method returns all available envKeys and Envs (httpServer configProvider)', (done) => {
+    expect.assertions(2);
+
+    const httpServerToken = 'http://localhost:3000';
+    const httpServerRepository = 'env-repo';
+
+    // @ts-ignore
+    axios.post = jest.fn((url) => {
+      expect(url).toBe(`${httpServerToken}/${httpServerRepository}`);
+      return Promise.resolve({
+        data: {
+          develop: environments.develop,
+          master: environments.master,
+        },
+      });
+    });
+
+    const envRegistryScalecube = new EnvRegistry<Env>({
+      token: httpServerToken,
+      configProvider: configurationTypes.httpServer,
+      repository: httpServerRepository,
+    });
+    envRegistryScalecube
+      .environments$({})
+      .pipe(toArray())
+      .subscribe((envs) => {
+        expect(envs).toEqual([devData, masterData]);
+        // @ts-ignore
+        axios.post.mockClear();
+        done();
+      });
+  });
+
+  it('Subscribe to environments$ method returns all available envKeys and Envs (localFile configProvider)', (done) => {
+    // expect.assertions(2);
+
+    const localFileToken = '../helpers/envsLocalFile';
+    const localFileRepository = 'json';
+
+    const envRegistryScalecube = new EnvRegistry<Env>({
+      token: localFileToken,
+      configProvider: configurationTypes.localFile,
+      repository: localFileRepository,
+    });
+    envRegistryScalecube
+      .environments$({})
+      .pipe(toArray())
+      .subscribe((envs) => {
+        // expect(envs).toEqual([devData, masterData]);
+        console.log('envs', envs);
+        done();
+      });
+  });
 });
