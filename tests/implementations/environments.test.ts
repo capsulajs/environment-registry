@@ -4,26 +4,21 @@ import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
 import { EnvRegistry } from '../../src';
 import { environments } from '../helpers/mocks';
 import { Env } from '../helpers/types';
-import { EnvRegistryItem } from '../../src/api/EnvRegistry';
+import { EnvRegistryItem } from '../../src/api';
 
 describe('Environments$ test suite', () => {
-  let envRegistry: EnvRegistry<Env>;
-
   const devData = { envKey: 'develop', env: environments.develop };
   const masterData = { envKey: 'master', env: environments.master };
   const tag1Data = { envKey: 'tag-1', env: environments['tag-1'] };
   const tag2Data = { envKey: 'tag-2', env: environments['tag-2'] };
 
-  beforeEach(async () => {
+  it('Subscribe to environments$ method returns all available envKeys and Envs (LocalStorage configProvider)', async (done) => {
+    expect.assertions(4);
     localStorage.clear();
-    envRegistry = new EnvRegistry({ token: 'token', configProvider: configurationTypes.localStorage });
+    const envRegistry = new EnvRegistry<Env>({ token: 'token', configProvider: configurationTypes.localStorage });
     await envRegistry.register(devData);
     await envRegistry.register(masterData);
     await envRegistry.register(tag1Data);
-  });
-
-  it('Subscribe to environments$ method returns all available envKeys and Envs (LocalStorage configProvider)', async (done) => {
-    expect.assertions(4);
     const receivedEnvs: Array<EnvRegistryItem<Env>> = [];
     const expectedArray = [tag1Data, masterData, devData];
     const expectedUpdatedArray = [tag1Data, masterData, tag2Data, devData];
@@ -161,22 +156,21 @@ describe('Environments$ test suite', () => {
   });
 
   it('Subscribe to environments$ method returns all available envKeys and Envs (localFile configProvider)', (done) => {
-    // expect.assertions(2);
-
-    const localFileToken = '../helpers/envsLocalFile';
+    expect.assertions(1);
+    const localFileToken = `${process.cwd()}/tests/helpers/envsLocalFile`;
     const localFileRepository = 'json';
 
-    const envRegistryScalecube = new EnvRegistry<Env>({
+    const envRegistryLocalFile = new EnvRegistry<string>({
       token: localFileToken,
       configProvider: configurationTypes.localFile,
       repository: localFileRepository,
     });
-    envRegistryScalecube
+
+    envRegistryLocalFile
       .environments$({})
       .pipe(toArray())
       .subscribe((envs) => {
-        // expect(envs).toEqual([devData, masterData]);
-        console.log('envs', envs);
+        expect(envs).toEqual([{ env: 'test', envKey: 'develop' }, { env: 'test5', envKey: 'master' }]);
         done();
       });
   });

@@ -7,6 +7,7 @@ export const validationMessages = {
   envKeyIsNotCorrect: 'envKey was not provided or is not a string',
   dispatcherUrlIsNotCorrect: 'dispatcherUrl was provided, but was not a non-empty string',
   repositoryIsNotCorrect: 'repository was provided, but was not a non-empty string',
+  savingIsNotSupported: 'saving is not supported in the current ConfigurationProvider',
 };
 
 export const defaultRepository = 'environmentRegistry';
