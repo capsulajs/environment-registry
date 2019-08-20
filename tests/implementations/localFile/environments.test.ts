@@ -8,13 +8,13 @@ describe('Environments$ test suite (localFile)', () => {
     const localFileToken = `${process.cwd()}/tests/helpers/envsLocalFile`;
     const localFileRepository = 'json';
 
-    const envRegistryLocalFile = new EnvRegistry<string>({
+    const envRegistry = new EnvRegistry<string>({
       token: localFileToken,
       configProvider: configurationTypes.localFile,
       repository: localFileRepository,
     });
 
-    envRegistryLocalFile
+    envRegistry
       .environments$({})
       .pipe(toArray())
       .subscribe((envs) => {

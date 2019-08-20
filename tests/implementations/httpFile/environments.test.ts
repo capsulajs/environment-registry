@@ -1,18 +1,15 @@
 import { toArray } from 'rxjs/operators';
 import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
 import { EnvRegistry } from '../../../src';
-import { environments, devData, masterData } from '../../helpers/mocks';
+import { environments, devData, masterData, baseUrl, baseRepository } from '../../helpers/mocks';
 import { Env } from '../../helpers/types';
 
 describe('Environments$ test suite (httpFile)', () => {
   it('Subscribe to environments$ method returns all available envKeys and Envs (httpFile configProvider)', (done) => {
     expect.assertions(2);
-    const httpFileToken = 'http://localhost:3000';
-    const repository = 'env-repo';
-
     // @ts-ignore
     global.fetch = jest.fn((fetchUrl) => {
-      expect(fetchUrl).toBe(`${httpFileToken}/${repository}.json`);
+      expect(fetchUrl).toBe(`${baseUrl}/${baseRepository}.json`);
       return Promise.resolve({
         json: () =>
           Promise.resolve({
@@ -22,12 +19,12 @@ describe('Environments$ test suite (httpFile)', () => {
       });
     });
 
-    const envRegistryHttpFile = new EnvRegistry<Env>({
-      token: httpFileToken,
+    const envRegistry = new EnvRegistry<Env>({
+      token: baseUrl,
       configProvider: configurationTypes.httpFile,
-      repository: repository,
+      repository: baseRepository,
     });
-    envRegistryHttpFile
+    envRegistry
       .environments$({})
       .pipe(toArray())
       .subscribe((envs) => {

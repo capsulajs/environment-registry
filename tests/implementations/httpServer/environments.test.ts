@@ -2,19 +2,16 @@ import axios from 'axios';
 import { toArray } from 'rxjs/operators';
 import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
 import { EnvRegistry } from '../../../src';
-import { environments, devData, masterData } from '../../helpers/mocks';
+import { environments, devData, masterData, baseUrl, baseRepository } from '../../helpers/mocks';
 import { Env } from '../../helpers/types';
 
 describe('Environments$ test suite (httpServer)', () => {
   it('Subscribe to environments$ method returns all available envKeys and Envs (httpServer configProvider)', (done) => {
     expect.assertions(2);
 
-    const httpServerToken = 'http://localhost:3000';
-    const httpServerRepository = 'env-repo';
-
     // @ts-ignore
     axios.post = jest.fn((url) => {
-      expect(url).toBe(`${httpServerToken}/${httpServerRepository}`);
+      expect(url).toBe(`${baseUrl}/${baseRepository}`);
       return Promise.resolve({
         data: {
           develop: environments.develop,
@@ -23,12 +20,12 @@ describe('Environments$ test suite (httpServer)', () => {
       });
     });
 
-    const envRegistryScalecube = new EnvRegistry<Env>({
-      token: httpServerToken,
+    const envRegistry = new EnvRegistry<Env>({
+      token: baseUrl,
       configProvider: configurationTypes.httpServer,
-      repository: httpServerRepository,
+      repository: baseRepository,
     });
-    envRegistryScalecube
+    envRegistry
       .environments$({})
       .pipe(toArray())
       .subscribe((envs) => {
