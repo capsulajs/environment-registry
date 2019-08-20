@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { toArray } from 'rxjs/operators';
 import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
 import { EnvRegistry } from '../../src';
@@ -52,10 +53,12 @@ describe('Environments$ test suite', () => {
 
   it('Subscribe to environments$ method returns all available envKeys and Envs (httpFile configProvider)', (done) => {
     expect.assertions(2);
+    const httpFileToken = 'http://localhost:3000';
+    const repository = 'env-repo';
 
     // @ts-ignore
     global.fetch = jest.fn((fetchUrl) => {
-      expect(fetchUrl).toBe('http://localhost:3000/env-repo.json');
+      expect(fetchUrl).toBe(`${httpFileToken}/${repository}.json`);
       return Promise.resolve({
         json: () =>
           Promise.resolve({
@@ -66,9 +69,9 @@ describe('Environments$ test suite', () => {
     });
 
     const envRegistryHttpFile = new EnvRegistry<Env>({
-      token: 'http://localhost:3000',
-      configProvider: 'httpFile',
-      repository: 'env-repo',
+      token: httpFileToken,
+      configProvider: configurationTypes.httpFile,
+      repository: repository,
     });
     envRegistryHttpFile
       .environments$({})
@@ -77,6 +80,49 @@ describe('Environments$ test suite', () => {
         expect(envs).toEqual([devData, masterData]);
         // @ts-ignore
         global.fetch.mockClear();
+        done();
+      });
+  });
+
+  it('Subscribe to environments$ method returns all available envKeys and Envs (scalecube configProvider)', (done) => {
+    expect.assertions(3);
+
+    const scToken = 'tokenabc';
+    const scRepository = 'env-repo';
+    const scUrl = 'http://localhost:3000';
+
+    // @ts-ignore
+    axios.post = jest.fn((url, options) => {
+      expect(url).toBe(`${scUrl}/configuration/readList`);
+      expect(options).toEqual({
+        apiKey: scToken,
+        repository: scRepository,
+      });
+
+      return Promise.resolve({
+        data: Object.entries({
+          develop: environments.develop,
+          master: environments.master,
+        }).map((entry) => ({
+          key: entry[0],
+          value: entry[1],
+        })),
+      });
+    });
+
+    const envRegistryScalecube = new EnvRegistry<Env>({
+      token: scToken,
+      configProvider: configurationTypes.scalecube,
+      dispatcherUrl: scUrl,
+      repository: scRepository,
+    });
+    envRegistryScalecube
+      .environments$({})
+      .pipe(toArray())
+      .subscribe((envs) => {
+        expect(envs).toEqual([devData, masterData]);
+        // @ts-ignore
+        axios.post.mockClear();
         done();
       });
   });
