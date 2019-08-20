@@ -1,6 +1,6 @@
 {
   "name": "@capsulajs/environment-registry",
-  "version": "0.0.4-next.1566313511.0",
+  "version": "0.0.4-next.1566313617.0",
   "description": "A service used in Capsula-Hub to register environments on demand ",
   "repository": "git@github.com:capsulajs/environment-registry.git",
   "author": "MikeSquall <michael.arbib@om2.com>",
