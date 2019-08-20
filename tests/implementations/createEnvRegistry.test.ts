@@ -98,6 +98,21 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
     });
   });
 
+  it('Create EnvRegistry with invalid value of repository', () => {
+    expect.assertions(10);
+    invalidArgs.forEach((repository) => {
+      try {
+        new EnvRegistry({
+          token,
+          // @ts-ignore
+          repository,
+        });
+      } catch (error) {
+        expect(error).toEqual(new Error(validationMessages.repositoryIsNotCorrect));
+      }
+    });
+  });
+
   it('Repository is applied correctly while the creation of envRegistry', async () => {
     expect.assertions(2);
     const repository = 'testRepo';
@@ -109,5 +124,15 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
     await envRegistry.register({ env: { name: 'testEnv' }, envKey: 'testEnv' });
     expect(localStorage.getItem(`${token}.${repository}`)).toBe('{"testEnv":{"name":"testEnv"}}');
     expect(localStorage.getItem(`${token}.${defaultRepository}`)).toBe(null);
+  });
+
+  it('Default repository is applied correctly while the creation of envRegistry, if no repository is provided', async () => {
+    expect.assertions(1);
+    const envRegistry = new EnvRegistry<{ name: string }>({
+      token,
+      configProvider: configurationServiceItems.configurationTypes.localStorage,
+    });
+    await envRegistry.register({ env: { name: 'testEnv' }, envKey: 'testEnv' });
+    expect(localStorage.getItem(`${token}.${defaultRepository}`)).toBe('{"testEnv":{"name":"testEnv"}}');
   });
 });

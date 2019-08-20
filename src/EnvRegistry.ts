@@ -13,7 +13,7 @@ import {
   EnvironmentsResponse,
   RegisterResponse,
 } from './api/EnvRegistry';
-import { isEnvKeyValid, isRegisterRequestValid } from './helpers/validators';
+import { isEnvKeyValid, isRegisterRequestValid, isRepositoryValid } from './helpers/validators';
 import { ConfigEntry, EntriesResponse } from './types';
 import { defaultRepository, validationMessages } from './helpers/constants';
 import { EnvRegistryOptions } from './api/EnvRegistryOptions';
@@ -33,6 +33,9 @@ export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
       dispatcherUrl
     );
     this.repositoryCreated = false;
+    if (!isRepositoryValid(repository)) {
+      throw new Error(validationMessages.repositoryIsNotCorrect);
+    }
     this.repository = repository || defaultRepository;
   }
 
