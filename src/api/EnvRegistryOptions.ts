@@ -1,4 +1,4 @@
-import { API } from '@capsulajs/capsulajs-configuration-service';
+import { API as CONFIGURATION_SERVICE_API } from '@capsulajs/capsulajs-configuration-service';
 
 export interface EnvRegistryOptions {
   /** Token used to get environments data */
@@ -8,7 +8,7 @@ export interface EnvRegistryOptions {
    * Possible values: "localFile","httpFile","scalecube","httpServer","localStorage"
    * @default "httpFile"
    */
-  configProvider?: API.ConfigurationProvider;
+  configProvider?: CONFIGURATION_SERVICE_API.ConfigurationProvider;
   /**
    * Dispatcher url, that will be used in "scalecube" config provider
    */

@@ -7,7 +7,32 @@ An environment is an object that contains an `envKey` and an `env`.
 
 The service exposes two methods: `register` and `environments$`.
 
-The service requires a token to store the data.
+EnvironmentRegistry can be created with all the possible providers from ConfigurationService (https://github.com/capsulajs/configuration-service).
+
+```typescript
+interface EnvRegistryOptions {
+  /** Token used to get environments data */
+  token: string;
+  /**
+   * The type of configuration provider, that will be used to get environments data
+   * Possible values: "localFile","httpFile","scalecube","httpServer","localStorage"
+   * @default "httpFile"
+   */
+  configProvider?: CONFIGURATION_SERVICE_API.ConfigurationProvider;
+  /**
+   * Dispatcher url, that will be used in "scalecube" config provider
+   */
+  dispatcherUrl?: string;
+  /**
+   * The name of the repository, that is used to get entries from ConfigurationService
+   * @default environmentRegistry
+   */
+  repository?: string;
+}
+```
+
+- Getting the already registered environments (**environments$** method) is possible in every configurationProvider;
+- Registering new environments (**register** method) is possible with the following configurationProviders: "localStorage", "scalecube".
 
 This service will be able to be called by a CI-CD pipeline in order to keep at
 disposal each version of projects/services automatically after pushing
@@ -30,7 +55,7 @@ npm i @capsulajs/environment-registry
 ```js
 import { EnvRegistry } from '@capsulajs/environment-registry';
 
-const envRegistry = new EnvRegistry('my-token');
+const envRegistry = new EnvRegistry({ token: 'http://envs-data-link.com' });
 
 // Register an environment
 envRegistry.register({
@@ -116,5 +141,4 @@ Output:
 
 #### To Do
 
--   Add logic to select the provider (local storage, file, configuration service, ...)
 -   Create an entry point to use in CI
