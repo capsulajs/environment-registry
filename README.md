@@ -7,7 +7,7 @@ An environment is an object that contains an `envKey` and an `env`.
 
 The service exposes two methods: `register` and `environments$`.
 
-EnvironmentRegistry can be created with all the possible providers from ConfigurationService (https://github.com/capsulajs/configuration-service).
+EnvironmentRegistry can be created with all the possible providers from ConfigurationService (`https://github.com/capsulajs/configuration-service`).
 
 ```typescript
 interface EnvRegistryOptions {
@@ -31,8 +31,8 @@ interface EnvRegistryOptions {
 }
 ```
 
-- Getting the already registered environments (**environments$** method) is possible in every configurationProvider;
-- Registering new environments (**register** method) is possible with the following configurationProviders: "localStorage", "scalecube".
+  - Getting the already registered environments (**environments$** method) is possible in every configurationProvider;
+  - Registering new environments (**register** method) is possible with the following configurationProviders: "localStorage", "scalecube".
 
 This service will be able to be called by a CI-CD pipeline in order to keep at
 disposal each version of projects/services automatically after pushing

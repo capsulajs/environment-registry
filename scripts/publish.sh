@@ -43,7 +43,6 @@ elif [[ "$TRAVIS_BRANCH" == "develop" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false"
     set_git_remote
     git checkout develop
     npm version prerelease --preid="next.$(date +%s)"
-    git push origin develop
     npm publish --tag next --access public
     echo_result "$?"
 
@@ -55,7 +54,6 @@ elif [[ "$TRAVIS_BRANCH" == "master" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" 
     set_git_remote
     git checkout master
     npm version patch
-    git push origin master
     npm publish --tag latest --access public
     echo_result "$?"
 
