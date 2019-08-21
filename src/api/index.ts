@@ -5,3 +5,4 @@ export {
   EnvRegistryItem,
   RegisterResponse,
 } from './EnvRegistry';
+export { EnvRegistryOptions } from './EnvRegistryOptions';
