@@ -9,4 +9,8 @@ export const isRegisterRequestValid = (request: any) => {
   );
 };
 
+export const isRepositoryValid = (repository: any) => {
+  return !(typeof repository !== 'undefined' && (!repository || typeof repository !== 'string' || !repository.trim()));
+};
+
 export const isEnvKeyValid = (envKey: any) => typeof envKey === 'string';

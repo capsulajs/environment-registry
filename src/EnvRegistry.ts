@@ -2,8 +2,9 @@ import { from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import {
   ConfigurationService,
-  ConfigurationServiceLocalStorage,
+  getProvider,
   messages,
+  configurationTypes,
 } from '@capsulajs/capsulajs-configuration-service';
 import {
   EnvRegistry as EnvRegistryInterface,
@@ -12,19 +13,30 @@ import {
   EnvironmentsResponse,
   RegisterResponse,
 } from './api/EnvRegistry';
-import { isEnvKeyValid, isRegisterRequestValid } from './helpers/validators';
+import { isEnvKeyValid, isRegisterRequestValid, isRepositoryValid } from './helpers/validators';
 import { ConfigEntry, EntriesResponse } from './types';
-import { validationMessages } from './helpers/constants';
+import { defaultRepository, validationMessages } from './helpers/constants';
+import { EnvRegistryOptions } from './api/EnvRegistryOptions';
+import { getConfigurationService } from './helpers/utils';
 
 export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
   private configurationService: ConfigurationService;
   private repositoryCreated: boolean;
   private readonly repository: string;
 
-  constructor(token: string) {
-    this.configurationService = new ConfigurationServiceLocalStorage(token); // add logic to choose specific provider
+  constructor({ token, configProvider, dispatcherUrl, repository }: EnvRegistryOptions) {
+    this.configurationService = getConfigurationService<Env>(
+      typeof token === 'string' ? token.trim() : '',
+      getProvider({
+        configProvider: typeof configProvider !== 'undefined' ? configProvider : configurationTypes.httpFile,
+      }),
+      dispatcherUrl
+    );
     this.repositoryCreated = false;
-    this.repository = 'environmentRegistry';
+    if (!isRepositoryValid(repository)) {
+      throw new Error(validationMessages.repositoryIsNotCorrect);
+    }
+    this.repository = repository || defaultRepository;
   }
 
   public async register(registerRequest: EnvRegistryItem<Env>): Promise<RegisterResponse> {
@@ -43,11 +55,14 @@ export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
       } catch (e) {
         if (e.message === messages.repositoryAlreadyExists) {
           this.repositoryCreated = true;
+        } else if (e.message.includes('Configuration repository method not implemented yet')) {
+          return Promise.reject(new Error(validationMessages.savingIsNotSupported));
         } else {
-          return Promise.reject(new Error(e));
+          return Promise.reject(typeof e === 'string' ? new Error(e) : e);
         }
       }
     }
+
     return this.save({ key: envKey, value: env });
   }
 

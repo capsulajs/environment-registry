@@ -9,6 +9,7 @@ Scenario: Create EnvRegistry with available configProvider and valid token
     |ScalecubeConfigurationProvider     | 'dispatcherUrl1'|
     |HttpServerConfigurationProvider    | (empty)         |
     |LocalStorageConfigurationProvider  | (empty)         |
+  And  repository "test"
   When create new EnvRegistry with tokenA, <configProvider> and <dispatcherUrl>
   Then EnvRegistry is created with the provided configuration provider
 
@@ -28,6 +29,7 @@ Scenario: Create EnvRegistry with invalid value of configProvider
   Given a configuration with "tokenA" that allows access to this configuration
   When create new EnvRegistry with token "tokenA" and the <configProvider>
     |<configProvider> |
+    |' '              |
     |{}        |
     |{ test: 'test' }|
     |[]        |
@@ -38,11 +40,6 @@ Scenario: Create EnvRegistry with invalid value of configProvider
     |0         |
     |-1        |
   Then an `invalidConfigurationProviderError` is thrown
-
-Scenario: Create EnvRegistry with non-existent token
-  Given a configuration with "tokenA" that allows access to this configuration using "LocalFileConfigurationProvider"
-  When create new EnvRegistry with token "tokenB" and "LocalFileConfigurationProvider" configProvider
-  Then a `tokenNotFoundError` is thrown
 
 Scenario: Create EnvRegistry with a token with invalid format
   Given a valid token is a non empty string
@@ -75,3 +72,37 @@ Scenario: Create EnvRegistry with invalid value of dispatcherUrl
     |0         |
     |-1        |
   Then an `invalidDispatcherUrlError` is thrown
+
+Scenario: Create EnvRegistry with invalid value of repository
+  Given a configuration with "tokenA" that allows access to this configuration
+  When create new EnvRegistry with token "tokenA" and the <repository>
+    |<repository>> |
+    |{}        |
+    |{ test: 'test' }|
+    |[]        |
+    |['test']  |
+    |null      |
+    |true      |
+    |false     |
+    |0         |
+    |-1        |
+  Then an `invalidRepositoryError` is thrown
+
+Scenario: Repository is applied correctly while the creation of envRegistry
+  Given a configuration with tokenA that allows access to this configuration
+  And  "LocalStorageConfigurationProvider" is the configProvider used
+  When create new EnvRegistry with tokenA, "LocalStorageConfigurationProvider" and "baseRepository" as a repository
+  And  an environment is registered
+  Then EnvRegistry is created with "LocalStorageConfigurationProvider"
+  And  accessing localStorage with a key that includes the token and repository will return the data of registered environment
+  And  accessing localStorage with a key that includes the token and default repository will return nothing
+
+Scenario: Default repository is applied correctly while the creation of envRegistry, if no repository is provided
+  Given a configuration with tokenA that allows access to this configuration
+  And  "LocalStorageConfigurationProvider" is the configProvider used
+  And  "testEnv" is default repository
+  When create new EnvRegistry with tokenA and "LocalStorageConfigurationProvider"
+  And  an environment is registered
+  Then EnvRegistry is created with "LocalStorageConfigurationProvider"
+  And  "testEnv" repository is applied
+  And  accessing localStorage with a key that includes the token and default repository will return the data of registered environment

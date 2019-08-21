@@ -1,13 +1,14 @@
-import { EnvRegistry } from '../../src';
-import { environments } from '../helpers/mocks';
-import { validationMessages } from '../../src/helpers/constants';
+import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
+import { EnvRegistry } from '../../../src';
+import { environments } from '../../helpers/mocks';
+import { validationMessages } from '../../../src/helpers/constants';
 
-describe('Register test suite', () => {
+describe('Register test suite (localStorageProvider)', () => {
   let envRegistry: EnvRegistry<any>;
 
   beforeEach(() => {
     localStorage.clear();
-    envRegistry = new EnvRegistry('token');
+    envRegistry = new EnvRegistry({ token: 'token', configProvider: configurationTypes.localStorage });
   });
 
   const correctEnvs = [

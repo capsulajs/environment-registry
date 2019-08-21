@@ -18,10 +18,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@capsulajs/capsulajs-configuration-service@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@capsulajs/capsulajs-configuration-service/-/capsulajs-configuration-service-0.1.5.tgz#ef6da7aa0be430194945c6b06dcf2fa71d47af9b"
-  integrity sha512-RzuMvXfhzm3UDKqem2d0wn15wAlHWUFy5XpjTtueUSIqlo2eOsLHXanclKF5gmM8EPtHQNtJklxOeeJsQ+0ZKw==
+"@capsulajs/capsulajs-configuration-service@^0.1.14":
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/@capsulajs/capsulajs-configuration-service/-/capsulajs-configuration-service-0.1.14.tgz#5a1cae76f4cbce96aa07ce19f3a1505110976eca"
+  integrity sha512-v1rLmDwakfgmAf2DpCUkrhecGGc+vf9HWzaNnjGhmYSqefJ+NqBihq0ZZ5+nIFQnpUjnRjxtvPEsxpX498ONOQ==
   dependencies:
     "@capsulajs/capsulajs-transport-providers" "^0.1.1"
 

@@ -1,5 +1,5 @@
 
-Scenario: Subscribe to environments$ method returns all available envKeys and Envs
+Scenario: Subscribe to environments$ method returns all available envKeys and Envs (LocalStorage configProvider)
    Given Environment Registry with environments method
    And   Several environments have been registered
    When  User subscribes to environments method with valid request
