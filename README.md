@@ -31,8 +31,8 @@ interface EnvRegistryOptions {
 }
 ```
 
-  - Getting the already registered environments (**environments$** method) is possible in every configurationProvider;
-  - Registering new environments (**register** method) is possible with the following configurationProviders: "localStorage", "scalecube".
+-   Getting the already registered environments (**environments$** method) is possible with every configurationProvider;
+-   Registering new environments (**register** method) is possible with the following configurationProviders: "localStorage", "scalecube".
 
 This service will be able to be called by a CI-CD pipeline in order to keep at
 disposal each version of projects/services automatically after pushing
