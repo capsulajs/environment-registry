@@ -86,7 +86,6 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
     expect.assertions(10);
     invalidArgs.forEach((dispatcherUrl) => {
       try {
-        // @ts-ignore
         new EnvRegistry({
           token,
           // @ts-ignore
