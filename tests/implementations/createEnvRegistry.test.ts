@@ -2,10 +2,11 @@ import * as configurationServiceItems from '@capsulajs/capsulajs-configuration-s
 import { EnvRegistryOptions } from '../../src/api/EnvRegistryOptions';
 import { EnvRegistry } from '../../src';
 import { defaultRepository, validationMessages } from '../../src/helpers/constants';
+import { baseUrl, baseRepository, baseApiKey } from '../helpers/mocks';
 
 describe('Create EnvRegistry with available configProvider and valid token', () => {
   const getConfigurationServiceClassSpy = jest.spyOn(configurationServiceItems, 'getProvider');
-  const token = 'token';
+  const token = baseApiKey;
   const invalidArgs = [' ', {}, { test: 'test' }, [], ['test'], null, true, false, 0, -1];
 
   beforeEach(() => {
@@ -26,7 +27,7 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
       expect.assertions(2);
       const envRegistryOptions: EnvRegistryOptions = { token, configProvider };
       if (configProvider === configurationServiceItems.configurationTypes.scalecube) {
-        envRegistryOptions.dispatcherUrl = 'http://localhost:3000';
+        envRegistryOptions.dispatcherUrl = baseUrl;
       }
       const envRegistry = new EnvRegistry(envRegistryOptions);
       expect(envRegistry instanceof EnvRegistry).toBeTruthy();
@@ -115,14 +116,13 @@ describe('Create EnvRegistry with available configProvider and valid token', () 
 
   it('Repository is applied correctly while the creation of envRegistry', async () => {
     expect.assertions(2);
-    const repository = 'testRepo';
     const envRegistry = new EnvRegistry<{ name: string }>({
       token,
       configProvider: configurationServiceItems.configurationTypes.localStorage,
-      repository,
+      repository: baseRepository,
     });
     await envRegistry.register({ env: { name: 'testEnv' }, envKey: 'testEnv' });
-    expect(localStorage.getItem(`${token}.${repository}`)).toBe('{"testEnv":{"name":"testEnv"}}');
+    expect(localStorage.getItem(`${token}.${baseRepository}`)).toBe('{"testEnv":{"name":"testEnv"}}');
     expect(localStorage.getItem(`${token}.${defaultRepository}`)).toBe(null);
   });
 

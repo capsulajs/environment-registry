@@ -55,11 +55,14 @@ export class EnvRegistry<Env> implements EnvRegistryInterface<Env> {
       } catch (e) {
         if (e.message === messages.repositoryAlreadyExists) {
           this.repositoryCreated = true;
+        } else if (e.message.includes('Configuration repository method not implemented yet')) {
+          return Promise.reject(new Error(validationMessages.savingIsNotSupported));
         } else {
-          return Promise.reject(new Error(e));
+          return Promise.reject(typeof e === 'string' ? new Error(e) : e);
         }
       }
     }
+
     return this.save({ key: envKey, value: env });
   }
 

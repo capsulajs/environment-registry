@@ -1,9 +1,9 @@
 import { configurationTypes } from '@capsulajs/capsulajs-configuration-service';
-import { EnvRegistry } from '../../src';
-import { environments } from '../helpers/mocks';
-import { validationMessages } from '../../src/helpers/constants';
+import { EnvRegistry } from '../../../src';
+import { environments } from '../../helpers/mocks';
+import { validationMessages } from '../../../src/helpers/constants';
 
-describe('Register test suite', () => {
+describe('Register test suite (localStorageProvider)', () => {
   let envRegistry: EnvRegistry<any>;
 
   beforeEach(() => {
