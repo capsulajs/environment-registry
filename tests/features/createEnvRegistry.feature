@@ -29,6 +29,7 @@ Scenario: Create EnvRegistry with invalid value of configProvider
   Given a configuration with "tokenA" that allows access to this configuration
   When create new EnvRegistry with token "tokenA" and the <configProvider>
     |<configProvider> |
+    |' '              |
     |{}        |
     |{ test: 'test' }|
     |[]        |
@@ -39,12 +40,6 @@ Scenario: Create EnvRegistry with invalid value of configProvider
     |0         |
     |-1        |
   Then an `invalidConfigurationProviderError` is thrown
-
-  // Not valid
-Scenario: Create EnvRegistry with non-existent token
-  Given a configuration with "tokenA" that allows access to this configuration using "LocalFileConfigurationProvider"
-  When create new EnvRegistry with token "tokenB" and "LocalFileConfigurationProvider" configProvider
-  Then a `tokenNotFoundError` is thrown
 
 Scenario: Create EnvRegistry with a token with invalid format
   Given a valid token is a non empty string
