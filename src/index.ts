@@ -1,8 +1,4 @@
+import * as API from './api';
+
+export { API };
 export { EnvRegistry } from './EnvRegistry';
-export {
-  EnvRegistry as EnvRegistryInterface,
-  EnvRegistryItem,
-  EnvironmentsRequest,
-  EnvironmentsResponse,
-  RegisterResponse,
-} from './api';
